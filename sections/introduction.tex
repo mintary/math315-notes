@@ -1,0 +1,190 @@
+\chapter{Introduction}
+
+\section{A simple first-order ODE}
+
+A simple first-order ODE has the form:
+
+\begin{equation*}
+y' = \frac{dy}{dx} = ky \quad k \in \mathbb{R}, \ k \in \mathbb{C}
+\end{equation*}
+
+To solve for the function $y$, we can divide both sides by $y$ then integrate both sides:
+\begin{align*}
+\int \frac{dy}{dx} \cdot \frac{1}{y} dx &= \int k \ dx \\
+\ln \abs{y} &= kx + C \\
+y &= e^{kx + C} \\
+y &= e^{kx} e^C \\
+\therefore \quad &
+\boxed{y= Ce^{kx}}
+\end{align*}
+
+If we apply an \textbf{initial condition}, such as $y(0) = y_0$, we can solve for the constant $C$:
+\begin{align*}
+y(0) &= Ce^{k \cdot 0} = C = y_0 \\
+\therefore y &= y_0 e^{kx}
+\end{align*}
+
+\ex{}{
+Find the general solution of $\frac{dy}{dx} = 2y + 1$.
+}
+
+\sol{}{
+We can rearrange the equation as follows:
+\begin{align*}
+\frac{dy}{dx} \cdot \frac{1}{2y + 1} &= 1 \\
+\int \frac{1}{2y + 1} \ dy &= \int 1 \ dx \\
+\frac{1}{2} \ln \abs{2y + 1} &= x + C \\
+\ln \abs{2y + 1} &= 2x + C' \\
+2y + 1 &= e^{2x + C'} \\
+2y + 1 &= C e^{2x} \\
+y &= \frac{Ce^{2x} - 1}{2}
+\end{align*}
+
+We can verify this solution by differentiating it:
+\begin{align*}
+\frac{dy}{dx} &= \frac{1}{2} \cdot C \cdot 2e^{2x} = Ce^{2x} \\
+2y + 1 &= 2 \cdot \frac{Ce^{2x} - 1}{2} + 1 = Ce^{2x} \\
+\therefore \frac{dy}{dx} &= 2y + 1
+\end{align*}
+}
+
+\section{Graphical interpretation of a first-order ODE}
+
+Given some equation of the form $y' = F(x,y)$, we could read this as "the slope of the function $y$ at the point $(x,y)$ is given by $F(x,y)$".
+
+If $F(x, y) > 0$, then the function is increasing at that point; if $F(x, y) < 0$, then the function is decreasing at that point. At every point of the $xy$-plane, we can compute the slope of the solution curve that passes through that point. We call this the \textbf{slope field} of the differential equation.
+
+\ex{}{
+Given the differential equation $\frac{dy}{dx} = 2x$, we can draw a slope field by evaluating the slope at every $(x,y)$ point.
+
+This produces a slope field that looks like this:
+\begin{center}
+\includegraphics{images/introduction/slope_field_quadratic.png}
+\end{center}
+
+The general solution of this differential equation is $y = x^2 + C$.
+
+We can draw a curve that is tangential to the slopes at every point to find a solution curve (or \textbf{integral curve}).
+
+If we pick an initial condition, such as $y(0) = 1$, we can approximate the solution curve by following the slopes in the slope field.
+
+
+}
+
+\dfn{Isoclines}{
+Isoclines are curves along which the slope of the solution curve is constant.
+
+For the differential equation $\frac{dy}{dx} = F(x,y)$, the isocline for slope $m$ is given by the equation $F(x,y) = m$.
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/introduction/isoclines_example.png}
+\end{center}
+
+}
+
+
+\section{Numerical approximation}
+
+\subsection{Euler's method}
+
+Most differential equations cannot be solved analytically.
+
+We define a function $f(x) = \dot x$, where $\dot x$ is the derivative of $x$ with respect to $t$.
+
+Recall the limit definition of the derivative:
+\begin{equation*}
+\dot x = \lim_{h \to 0} \frac{x(t+h) - x(t)}{h}
+\end{equation*}
+
+Then for some sufficiently small $h$, we can approximate:
+\begin{equation*}
+\dot x \approx \frac{x(t+h) - x(t)}{h}
+\end{equation*}
+
+Since we have that $\dot x = f(x)$, we can rearrange this to get:
+\begin{equation*}
+\boxed{
+x(t+h) \approx x(t) + h f(x(t))
+}
+\end{equation*}
+
+This is known as \textbf{Euler's method}.
+
+We can also write it in discrete form as:
+\begin{equation*}
+\boxed{
+x_{m+1} = x_m + h f(x_m)
+}
+\end{equation*}
+where $x_m = x(t_m)$ and $t_m = t_0 + mh$.
+
+The Euler backward method looks like:
+\begin{equation*}
+\boxed{
+x_{m+1} = x_m + h f(x_{m+1})
+}
+\end{equation*}
+
+However, in practice, it is often difficult to solve for $x_{m+1}$ in this equation. Rather, the improved Euler method uses the average of the slopes at the beginning and end of the interval. Then using our approximation of $x_{m+1}$ from the Euler forward method, we could average the "beginning" of the step and the "end" of the step as follows:
+\begin{align*}
+\tilde{x}_{m+1} &= x_m + h f(x_m) \\
+x_{m+1} &= x_m + \frac{1}{2} h \left( f(x_m) + f(\tilde{x}_{m+1})  \right)
+\end{align*}
+
+\begin{equation*}
+\boxed{
+x_{m+1} = x_m + \frac{h}{2} \left( f(x_m) + f\left( x_m + h f(x_m) \right) \right)
+}
+\end{equation*}
+
+\subsection{Local and global error}
+
+The \textbf{global error} could be written as:
+\begin{equation*}
+E = | x(t_N) - x_N |
+\end{equation*}
+
+where $x(t_N)$ is the exact solution at time $t_N$ and $x_N$ is the numerical approximation at time $t_N$.
+
+Let the final time be $T = N \cdot h$, where $h$ is the step size and $N$ is the number of steps taken.
+
+The \textbf{local error} at step $m$ is defined as:
+\begin{equation*}
+E_m = | x(t_{m}) - x_{m} |
+\end{equation*}
+
+To analyze the error, we can use Taylor's theorem to expand $x(t_{m+1})$ around $t_m$:
+\begin{equation*}
+x(t_{m+1}) = x(t_m) + h \dot x(t_m) + \frac{h^2}{2} \ddot x(t_m)
+\end{equation*}
+
+Then for \textbf{Euler's forward method}, we have:
+\begin{equation*}
+x(t_{m+1}) = x(t_m) + h f(x(t_m)) + e
+\end{equation*}
+
+Then we can bound $e$ using the second derivative term:
+
+In other words, by Taylor's theorem, the error $e$ at each step is given by the $h^2$ term involving the second derivative, plus even smaller terms involving higher derivatives and higher powers of $h$. That is,
+\[
+|e| \leq \text{(a constant)} \times h^2 \times \max_{t \in [0, T]} |\ddot x(t)| + \text{(smaller terms involving higher derivatives and higher powers of $h$)}
+\]
+where the constant is $1/2$ in this case for the $h^2$ term.
+
+So $e$ (the local error) is dominated by the $h^2$ term, but in reality, there are also even smaller contributions from higher derivatives (like $\dddot x$) and higher powers of $h$.
+
+
+To bound the global error, we add up the local errors over all $N$ steps. This means the total (global) error $E$.
+\begin{align*}
+E &\leq \sum_{i=1}^{N} | e_i |  \\
+&\leq \frac{T}{h} \cdot h^2 \cdot \max_{t \in [0, T]} |\ddot x(t)| \\
+&= T \cdot h \cdot \max_{t \in [0, T]} |\ddot x(t)|
+\end{align*}
+
+
+So the global error $E$ is proportional to $h$ for Euler's forward method.
+
+\dfn{}{
+    If a numerical method has a one-step error of size $h^{p+1}$, then we say the method is of order $p$.
+
+    The global error is then of size $h^p$.
+}

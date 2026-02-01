@@ -1,0 +1,570 @@
+\chapter{Techniques for first-order ODEs}
+
+\section{Separation of variables}
+
+The standard form of a 1st order ODE is given by:
+\begin{equation*}
+\overline{R}(t) \dot x + \overline{P}(t) x = \overline{q} (t) \quad \overline{R}(t) \not = 0
+\end{equation*}
+
+If we let:
+\begin{equation*}
+p = \frac{\overline{P}(t)}{\overline{R}(t)} \quad , \quad q = \frac{\overline{q}(t)}{\overline{R}(t)}
+\end{equation*}
+
+Then we obtain the equation in the form:
+\begin{equation*}
+\boxed{\dot x + p(t) x = q(t)}
+\end{equation*}
+
+\dfn{Homogeneous equation}{
+    An ODE is said to be \textbf{homogeneous} if $q(t) = 0$ for all $t$ in the interval of interest. 
+}
+
+Intuitively, the system evolves with no additional forcing or input beyond its initial conditions.
+
+A homogeneous equation is also \textbf{separable} if it can be expressed in the form:
+\begin{equation*}
+\frac{\dot x}{x} = f(t)
+\end{equation*}
+
+\dfn{Separable equation}{
+    An ODE is said to be \textbf{separable} if it can be expressed in the form:
+    \begin{equation*}
+    \frac{dx}{dt} = g(t) h(x)
+    \end{equation*}
+    where $g(t)$ is a function of $t$ only and $h(x)$ is a function of $x$ only.
+}
+
+We can easily solve separable equations by separating the variables and integrating both sides.
+\ex{}{
+    Solve the following ODE:
+    \begin{equation*}
+    \dot x + p(t) x = 0
+    \end{equation*}
+}
+\sol{}{
+    We can rewrite the equation as:
+    \begin{equation*}
+    \frac{\dot x}{x} = -p(t)
+    \end{equation*}
+    
+    Then we separate the variables:
+    \begin{align*}
+    \frac{1}{x} \frac{dx}{dt} &= -p(t) \\
+    \frac{1}{x} dx &= -p(t) dt
+    \end{align*}
+    
+    Now we integrate both sides:
+    \begin{align*}
+    \int \frac{1}{x} dx &= \int -p(t) dt \\
+    \ln |x| &= -\int p(t) dt + C \\
+    |x| &= e^{-\int p(t) dt + C} \\
+    x(t) &= \pm e^C e^{-\int p(t) dt} \\
+    x(t) &= K e^{-\int p(t) dt} \quad , \quad K = \pm e^C
+    \end{align*}
+    
+    Thus, the general solution to the ODE is:
+    \begin{equation*}
+    \boxed{x(t) = K e^{-\int p(t) dt}}
+    \end{equation*}
+}
+
+\begin{mdframed}
+\subsection{Steps to solve separable equations}
+\begin{enumerate}
+    \item Rewrite the ODE in the form $\frac{dx}{dt} = g(t) h(x)$.
+    \item Separate the variables to obtain $\frac{1}{h(x)} dx = g(t) dt$.
+    \item Integrate both sides: $\int \frac{1}{h(x)} dx = \int g(t) dt$.
+    \item Solve for $x(t)$.
+    \item (Optional) Apply any initial conditions to solve for constants of integration.
+\end{enumerate}
+\end{mdframed}
+
+\dfn{Homogeneous solution}{
+    In general, the solution to a homogeneous ODE is called the \textbf{homogeneous solution}.
+
+    \begin{equation*}
+    \boxed{
+    X_h(t) = e^{-\int p(t) dt}
+    }
+    \end{equation*}
+
+    Then:
+    \begin{equation*}
+    x(t) = K X_h(t)
+    \end{equation*}
+
+    for some constant $K$.
+}
+
+\ex{Newton's law of cooling}{
+    The change in temperature $u$ over time $t$ is proportional to the difference in temperature between the object and its surroundings.
+
+    Let $u_0$ be the initial temperature of the object and $T_{\text{ext}}$ be the external temperature. Let $k$ be the proportionality constant. Then:
+    \begin{equation*}
+    \dot u  = -k (u - T_{\text{ext}})
+    \end{equation*}
+}
+
+\sol{}{
+    We can rewrite the equation as:
+    \begin{equation*}
+    \dot u + k u = k T_{\text{ext}}
+    \end{equation*}
+
+    This is a first-order linear ODE. We can separate the variables:
+    \begin{align*}
+    \frac{du}{dt} &= -k (u - T_{\text{ext}}) \\
+    \frac{1}{u - T_{\text{ext}}} du &= -k dt
+    \end{align*}
+
+    Then, we integrate both sides:
+    \begin{align*}
+    \int \frac{1}{u - T_{\text{ext}}} du &= \int -k dt \\
+    \ln |u - T_{\text{ext}}| &= -kt + C \\
+    |u - T_{\text{ext}}| &= e^{-kt + C} \\
+    u - T_{\text{ext}} &= \pm e^C e^{-kt} \\
+    u(t) &= \pm e^C e^{-kt} + T_{\text{ext}} \\
+    u(t) &= K e^{-kt} + T_{\text{ext}} \quad , \quad K = \pm e^C
+    \end{align*}
+
+    To find $K$, we use the initial condition $u(0) = u_0$:
+    \begin{align*}
+    u(0) &= K e^{-k \cdot 0} + T_{\text{ext}} \\
+    u_0 &= K + T_{\text{ext}} \\
+    K &= u_0 - T_{\text{ext}}
+    \end{align*}
+
+    Therefore, the solution to the ODE is:
+    \begin{equation*}
+    \boxed{
+    u(t) = (u_0 - T_{\text{ext}}) e^{-kt} + T_{\text{ext}}
+    }
+    \end{equation*}
+
+    Intuitively, this can also be used to model warming as well as cooling. This depends on the sign of $(u_0 - T_{\text{ext}})$. 
+}
+
+
+\section{Integrating factors}
+
+We are given an equation:
+\begin{equation*}
+\dot x + p(t) x = q(t)
+\end{equation*}
+
+
+The method of integrating factors can be thought of intuitively as "undoing" the product rule of differentiation. Specifically, we would like to transform the left-hand side of the equation into the derivative of a product of two functions $u(t)$ and $x(t)$:
+\begin{equation*}
+\frac{d}{dt} \left[ u(t) x(t) \right] = u(t) \dot x(t) + \dot u(t) x(t)
+\end{equation*}
+
+Looking at our original equation, we'd like to have some $\mu(t)$ to multiply throughout the equation such that:
+\begin{align*}
+\mu(t) \dot x + \mu(t) p(t) x &= u(t) \dot x + \dot u(t) x \\
+&= \frac{d}{dt} \left[ u(t) x(t) \right]
+\end{align*}
+
+This means we need to have:
+\[
+\begin{cases}
+\mu(t) = u(t) \\
+\mu(t) p(t) = \dot u(t)
+\end{cases}
+\]
+
+Solving for $\mu(t)$, we have:
+\begin{align*}
+\dot u = up(t) \\
+\frac{du}{dt} = up(t) \\
+\frac{1}{u} du = p(t) dt \\
+\int \frac{1}{u} du = \int p(t) dt \\
+\ln |u| = \int p(t) dt + C \\
+u(t) = e^{\int p(t) dt + C} = e^C e^{\int p(t) dt}
+\end{align*}
+
+We can ignore the constant as it will cancel out later.
+
+\dfn{Integrating factor}
+{
+    The \textbf{integrating factor} for the first-order linear ODE $\dot x + p(t) x = q(t)$ is given by:
+    \begin{equation*}
+    \boxed{
+    \mu(t) = e^{\int p(t) dt}
+    }
+    \end{equation*}
+
+    Also, this is the reciprocal of the homogeneous solution $X_h(t)$ from separation of variables:
+    \begin{equation*}
+    \mu(t) = X^{-1}_h(t)
+    \end{equation*}
+}
+
+\begin{mdframed}
+\subsection{Steps to solve using integrating factors}
+\begin{enumerate}
+    \item Start with the standard form of the ODE: $\dot x + p(t) x = q(t)$.
+    \item Compute the integrating factor: $\mu(t) = e^{\int p(t) dt}$.
+    \item Multiply both sides of the ODE by the integrating factor $\mu(t)$.
+    \item Recognize that the left-hand side is now the derivative of the product:
+    \[
+        \frac{d}{dt} \left[ \mu(t) x(t) \right] = \mu(t) q(t)
+    \]
+    \item Integrate both sides with respect to $t$:
+    \[
+        \mu(t) x(t) = \int \mu(t) q(t) dt + C
+    \]
+    \item Solve for $x(t)$:
+    \[
+        x(t) = \frac{1}{\mu(t)} \left( \int \mu(t) q(t) dt + C \right)
+    \]
+    \item (Optional) Apply any initial conditions to solve for the constant $C$.
+\end{enumerate}
+\end{mdframed}
+
+\ex{}{
+    Solve the initial value problem:
+    \begin{equation*}
+    t\dot x + 2x = t^2 - t + 1, \quad x(1) = \frac{1}{2}
+    \end{equation*}
+}
+\sol{}{
+    \begin{enumerate}
+        \item Standard form: $\dot x + \frac{2}{t} x = t - 1 + \frac{1}{t}$
+        \item Integrating factor:
+        \begin{align*}
+        \mu(t) &= e^{\int \frac{2}{t} dt} \\
+        &= e^{2 \ln |t|} \\
+        &= t^2
+        \end{align*}
+        \item Multiply through by $\mu(t)$:
+        \begin{equation*}
+        t^2 \dot x + 2t x = t^3 - t^2 + t
+        \end{equation*}
+        \item Left-hand side as derivative:
+        \begin{equation*}
+        \frac{d}{dt} \left[ t^2 x \right] = t^3 - t^2 + t
+        \end{equation*}
+        \item Integrate both sides:
+        \begin{align*}
+        t^2 x &= \int (t^3 - t^2 + t) dt + C \\
+        &= \frac{t^4}{4} - \frac{t^3}{3} + \frac{t^2}{2} + C
+        \end{align*}
+        \item Solve for $x(t)$:
+        \begin{equation*}
+        x(t) = \frac{1}{t^2} \left( \frac{t^4}{4} - \frac{t^3}{3} + \frac{t^2}{2} + C \right) = \frac{t^2}{4} - \frac{t}{3} + \frac{1}{2} + \frac{C}{t^2}
+        \end{equation*}
+        \item Apply initial condition $x(1) = \frac{1}{2}$:
+        \begin{align*}
+        \frac{1}{2} &= \frac{1}{4} - \frac{1}{3} + \frac{1}{2} + C \\
+        C &= \frac{1}{12}
+        \end{align*}
+    \end{enumerate}
+    \begin{equation*}
+    \boxed{
+    x(t) = \frac{t^2}{4} - \frac{t}{3} + \frac{1}{2} + \frac{1}{12t^2}
+    }
+    \end{equation*}
+}
+
+\section{Substitution technique}
+
+Consider the differential equation:
+\begin{equation*}
+\dot y = F(\frac{y}{x})
+\end{equation*}
+
+We can eliminate the $x$ in the denominator to have a function of a single variable by substituting:
+\begin{equation*}
+v = \frac{y}{x} \implies y = vx
+\end{equation*}
+
+Then rearranging:
+\begin{align*}
+\dot y &= F(v) \\
+v + x \dot v &= F(v)  \\
+x \dot v &= F(v) - v \\
+x \cdot \frac{dv}{dx} &= F(v) - v \\
+\frac{dv}{dx} &= \frac{F(v) - v}{x} \\
+\frac{dv}{F(v) - v} &= \frac{dx}{x} \quad \text{(separable equation)}
+\end{align*}
+
+\begin{mdframed}
+\subsection{Steps to solve using substitution technique}
+\begin{enumerate}
+    \item Identify the substitution: $v = \frac{y}{x}$, which implies $y = vx$.
+    \item Differentiate $y$ with respect to $x$ using the product rule:
+    \[
+        \frac{dy}{dx} = v + x \frac{dv}{dx}
+    \]
+    \item Substitute $\frac{dy}{dx}$ and $y$ into the original ODE to express it in terms of $v$ and $x$.
+    \item Rearrange the equation to isolate $\frac{dv}{dx}$.
+    \item Separate the variables to obtain an equation of the form:
+    \[
+        \frac{dv}{F(v) - v} = \frac{dx}{x}
+    \]
+    \item Integrate both sides to find $v(x)$.
+    \item Substitute back to find $y(x)$ using $y = vx$.
+    \item (Optional) Apply any initial conditions to solve for constants of integration.
+\end{enumerate}
+\end{mdframed}
+
+We can now solve this separable equation for $v(x)$, then substitute back to find $y(x)$.
+\ex{Tutorial 3 problem 1}{
+    Solve the initial value problem:
+    \[
+    \begin{cases*}
+    \dot y = \frac{x^2 + 3y^2}{2xy} \\
+    y(-2) = 6
+    \end{cases*}
+    \]
+}
+
+\sol{}{
+    We rewrite so we can make some substitution for $u = \frac{y}{x}$:
+    \begin{align*}
+    \dot y &= \frac{x^2 + 3y^2}{2xy} \\
+    &= \frac{x^2}{2xy} + \frac{3y^2}{2xy} \\
+    &= \frac{x}{2y} + \frac{3y}{2x} \\
+    &= \frac{1}{2 \cdot \frac{y}{x}} + \frac{3}{2} \cdot \frac{y}{x} \\
+    &= \frac{1}{2u} + \frac{3}{2} u
+    \end{align*}
+
+    Recall that $u = \frac{y}{x} \implies y = ux$. Then $\frac{dy}{dx} = u + x \frac{du}{dx}$. Substituting this in:
+    \begin{align*}
+    u + x \frac{du}{dx} &= \frac{1}{2u} + \frac{3}{2} u \\
+    x \frac{du}{dx} &= \frac{1}{2u} + \frac{3}{2} u - u \\
+    x \ du = \left( \frac{1}{2u} + \frac{1}{2} u \right) dx \\
+    \frac{1}{\frac{1}{2u} + \frac{1}{2} u} \ du = \frac{dx}{x} \\
+    \end{align*}
+
+    Note that this is effectively transforming the original equation into the separable form $\frac{dv}{F(v) - v} = \frac{dx}{x}$.
+
+    Now we integrate by partial fractions:
+    \begin{align*}
+    \int \frac{1}{\frac{1}{2u} + \frac{1}{2} u} \ du &= \int \frac{dx}{x} \\
+    \int \frac{2u}{1 + u^2} \ du &= \ln |x| + C \\
+    \int \frac{1}{1 + u^2} \ d(u^2) &= \ln |x| + C \\
+    \ln |1 + u^2| &= \ln |x| + C \\
+    1 + u^2 &= K |x| \ , \quad K = e^C
+    1 + u^2 &= Bx \, \quad B = \pm K
+    \end{align*}
+
+    Then substituting back for $u = \frac{y}{x}$:
+    \begin{align*}
+    1 + \left( \frac{y}{x} \right)^2 &= Bx \\
+    1 + \frac{y^2}{x^2} &= Bx \\
+    y^2 &= Bx^3 - x^2
+    \end{align*}
+
+    Rearranging gives the general solution:
+    \begin{equation*}
+    y^2 = Bx^3 - x^2
+    \end{equation*}
+
+    We can solve for $y$:
+    \begin{equation*}
+    \boxed{y = \pm \sqrt{Bx^3 - x^2}}
+    \end{equation*}
+
+    Now using the initial condition $y(-2) = 6$ to solve for $B$:
+    \begin{align*}
+    6 &= \pm \sqrt{B(-2)^3 - (-2)^2} \\
+    36 &= -8B - 4 \\
+    40 &= -8B \\
+    B &= -5
+    \end{align*}
+
+    We must choose the positive root since $y(-2) = 6 > 0$. Thus the particular solution is:
+    \begin{equation*}
+    \boxed{y = \sqrt{-5x^3 - x^2}}
+    \end{equation*}
+
+    The domain is $-5x^3 - x^2 \geq 0 \implies x^2(-5x - 1) \geq 0 \implies x \leq -\frac{1}{5}$.
+}
+
+\section{Exact equations}
+
+We have solely dealt with first-order linear and separable differential equations so far. However, some ODEs will have functions of both $x$ and $y$ that prevent separation.
+
+\ex{}{
+    Solve the following ODE:
+    \begin{equation*}
+    (2xy - 9x^2) + (2y + x^2 + 1) \frac{dy}{dx} = 0
+    \end{equation*}
+}
+
+\sol{}{
+Now consider some function $\Psi(x, y)$ (don't worry about how we got it yet) such that:
+\begin{equation*}
+\Psi(x, y) = y^2 + (x^2 + 1)y - 3x^3
+\end{equation*}
+
+If we compute the partial derivatives, we find:
+\begin{align*}
+\Psi_x &= 2xy - 9x^2 \\
+\Psi_y &= 2y + x^2 + 1
+\end{align*}
+
+These expressions appear in our original equation. Using the chain rule for partial derivatives:
+\begin{align*}
+    \frac{d}{dx} \Psi(x, y(x)) &= \Psi_x \frac{dx}{dx} + \Psi_y \frac{dy}{dx} \\
+    \frac{d}{dx} \Psi(x, y(x)) &= \Psi_x + \Psi_y \frac{dy}{dx}
+\end{align*}
+
+Then we can rewrite the original ODE as:
+\begin{equation*}
+\Psi_x + \Psi_y \frac{dy}{dx} = 0
+\end{equation*}
+
+Thus, we have:
+\begin{equation*}
+\frac{d}{dx} \Psi(x, y) = 0
+\end{equation*}
+
+Integrating both sides with respect to $x$ gives:
+\begin{equation*}
+\Psi(x, y) = C
+\end{equation*}
+
+So the general solution to the ODE is:
+\begin{equation*}
+\boxed{
+y^2 + (x^2 + 1)y - 3x^3 = C
+}
+\end{equation*}
+}
+
+We are therefore concerned with obtaining a method to find such a function $\Psi(x, y)$ for a given ODE.
+
+\dfn{Exact equation}{
+    An ODE of the form:
+    \begin{equation*}
+    M(x, y) + N(x, y) \frac{dy}{dx} = 0
+    \end{equation*}
+    is said to be an \textbf{exact equation} if there exists a function $\Psi(x, y)$ such that:
+    \begin{align*}
+    \Psi_x &= M(x, y) \\
+    \Psi_y &= N(x, y)
+    \end{align*}
+
+    If an ODE is exact, we have:
+    \begin{equation*}
+    \boxed{
+    \frac{d}{dx} \Psi(x, y) = \Psi_x + \Psi_y \frac{dy}{dx} = 0
+    }
+    \end{equation*}
+
+    Then the solution to the ODE is given implicitly by:
+    \begin{equation*}
+    \boxed{
+    \Psi(x, y) = C
+    }
+    \end{equation*}
+}
+
+If $\Psi(x, y)$ is continuously differentiable, then we have that:
+\begin{equation*}
+(\Psi_x)_y = (\Psi_y)_x
+\end{equation*}
+
+Then the equation is only exact if:
+\begin{equation*}
+\boxed{
+M_y = N_x
+}
+\end{equation*}
+
+
+\begin{mdframed}
+\subsection{Steps to solve exact equations}
+\begin{enumerate}
+    \item Verify that the equation is exact by checking if $M_y = N_x$.
+    \item Integrate $M(x, y)$ with respect to $x$ to find $\Psi(x, y)$ up to a function of $y$:
+    \begin{equation*}
+    \Psi(x, y) = \int M(x, y) \, dx + h(y)
+    \end{equation*}
+    \item Differentiate $\Psi(x, y)$ with respect to $y$ and set it equal to $N(x, y)$ to solve for $h(y)$:
+    \begin{equation*}
+    \frac{\partial \Psi}{\partial y} = N(x, y)
+    \end{equation*}
+    \item Substitute $h(y)$ back into $\Psi(x, y)$.
+    \item (Optional) Apply the initial condition if given back into:
+    \begin{equation*}
+    \Psi(x, y) = C
+    \end{equation*}
+\end{enumerate}
+\end{mdframed}
+
+\nt{
+    If it is easier, you can also integrate $N(x, y)$ with respect to $y$ first, then differentiate with respect to $x$ to find the function of $x$.
+}
+
+\ex{}{
+    Solve the following initial value problem:
+    \begin{equation*}
+    2xy - 9x^2 + (2y + x^2 + 1) \frac{dy}{dx} = 0, \quad y(0) = -3
+    \end{equation*}
+}
+\sol{}{
+    \begin{enumerate}
+        \item Find and verify $M_y$ and $N_x$:
+        \begin{align*}
+        M(x, y) &= 2xy - 9x^2 \\
+        N(x, y) &= 2y + x^2 + 1 \\
+        M_y(x, y) &= 2x \\
+        N_x(x, y) &= 2x
+        \end{align*}
+        Since $M_y = N_x$, the equation is exact.
+        \item Integrate $M(x, y)$ with respect to $x$:
+        \begin{align*}
+        \Psi(x, y) &= \int (2xy - 9x^2) \, dx + h(y) \\
+        &= x^2 y - 3x^3 + h(y)
+        \end{align*}
+        \item Differentiate $\Psi(x, y)$ with respect to $y$ and set equal to $N(x, y)$:
+        \begin{align*}
+        \frac{\partial \Psi}{\partial y} &= x^2 + h'(y) \\
+        x^2 + h'(y) &= 2y + x^2 + 1 \\
+        h'(y) &= 2y + 1
+        \end{align*}
+        Integrating gives:
+        \begin{equation*}
+        h(y) = y^2 + y + K
+        \end{equation*}
+        \item Substitute $h(y)$ back into $\Psi(x, y)$:
+        \begin{equation*}
+        \Psi(x, y) = x^2 y - 3x^3 + y^2 + y + K
+        \end{equation*}
+        \item Apply the initial condition $y(0) = -3$:
+        \begin{align*}
+        \Psi(0, -3) &= 0^2 \cdot (-3) - 3 \cdot 0^3 + (-3)^2 + (-3) + K \\
+        &= 0 + 0 + 9 - 3 + K \\
+        &= 6 + K
+        \end{align*}
+        Setting this equal to $C$, we have:
+        \begin{equation*}
+        C = 6 + K
+        \end{equation*}
+        Thus, the particular solution is:
+        \begin{equation*}
+        \boxed{
+        x^2 y - 3x^3 + y^2 + y = 6
+        }
+        \end{equation*}
+        \item We could also solve for $y$ explicitly using the quadratic formula:
+        \begin{align*}
+        y^2 + (x^2 + 1)y + (-3x^3 - 6) &= 0 \\
+        y &= \frac{-(x^2 + 1) \pm \sqrt{(x^2 + 1)^2 - 4(-3x^3 - 6)}}{2} \\
+        y &= \frac{-(x^2 + 1) \pm \sqrt{x^4 + 2x^2 + 1 + 12x^3 + 24}}{2} \\
+        y &= \frac{-(x^2 + 1) \pm \sqrt{x^4 + 12x^3 + 2x^2 + 25}}{2}
+        \end{align*}
+        We must now choose the correct sign for the initial condition $y(0) = -3$, since $-3$ is less than $\frac{-(0^2 + 1)}{2} = -\frac{1}{2}$. Thus we choose the negative root:
+        \begin{equation*}
+        \boxed{
+        y = \frac{-(x^2 + 1) - \sqrt{x^4 + 12x^3 + 2x^2 + 25}}{2}
+        }
+        \end{equation*}
+
+    \end{enumerate}
+}

@@ -1,0 +1,24 @@
+\documentclass{report}
+\input{latex_template/preamble}
+\input{latex_template/macros}
+\input{latex_template/letterfonts}
+\usepackage{float}
+
+\newcommand*{\Perm}[2]{{}^{#1}\!P_{#2}}%
+\newcommand{\Indep}{\perp \!\!\! \perp}%
+\title{\Huge{MATH 315 (Winter 2026)}}
+\author{\huge{Notes by: Emily Wang}}
+\date{\today}
+
+\begin{document}
+\maketitle
+\newpage% or \cleardoublepage
+% \pdfbookmark[<level>]{<title>}{<dest>}
+\pdfbookmark[section]{\contentsname}{toc}
+\tableofcontents
+\pagebreak
+
+\input{sections/introduction}
+\input{sections/first_order_odes}
+
+\end{document}
