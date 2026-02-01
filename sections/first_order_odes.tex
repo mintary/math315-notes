@@ -1,4 +1,4 @@
-\chapter{Techniques for first-order ODEs}
+\chapter{Techniques for solving first-order ODEs}
 
 \section{Separation of variables}
 
@@ -566,5 +566,161 @@ M_y = N_x
         }
         \end{equation*}
 
+    \end{enumerate}
+}
+
+\section{Non-exact equations}
+Sometimes, we will have that $M_y \not = N_x$. Like with integrating factors, we can multiply through by some function $\mu(x, y)$ to make the equation exact.
+
+Let there be some function $\mu(x, y)$ such that:
+\begin{equation*}
+\mu M + \mu N \dot y = 0
+\end{equation*}
+
+Then for exactness, we need:
+\begin{equation*}
+(\mu M)_y = (\mu N)_x
+\end{equation*}
+
+Expanding both sides using the product rule:
+\begin{align*}
+(\mu M)_y &= \mu_y M + \mu M_y \\
+(\mu N)_x &= \mu_x N + \mu N_x
+\end{align*}
+
+This is a partial differential equation in $\mu(x, y)$. In general, this is difficult to solve. However, if we assume that $\mu$ is only a function of $x$ or only a function of $y$, we can reduce this to an ordinary differential equation.
+
+\dfn{Integrating factor for non-exact equations}{
+    An \textbf{integrating factor} for a non-exact equation of the form:
+    \begin{equation*}
+    M(x, y) + N(x, y) \frac{dy}{dx} = 0
+    \end{equation*}
+    is a function $\mu(x)$ or $\mu(y)$ such that multiplying through by $\mu$ makes the equation exact.
+}
+
+\begin{enumerate}
+    \item \textbf{Case 1: $\mu = \mu(x)$ (function of only $x$)}.
+    Then if we rearrange for $\frac{d\mu}{dx}$, we have:
+    \begin{align*}
+    \mu_y M + \mu M_y &= \mu_x N + \mu N_x \\
+    0 + \mu M_y &= \frac{d\mu}{dx} N + \mu N_x \\
+    \mu M_y - \mu N_x &= \frac{d\mu}{dx} N \\
+    \frac{1}{\mu} \frac{d\mu}{dx} &= \frac{M_y - N_x}{N} \\
+    \frac{d\mu}{dx} &= \mu \cdot \frac{M_y - N_x}{N}
+    \end{align*}
+    As this is now separable, we can write the integrating factor as:
+    \begin{equation*}
+    \boxed{
+    \mu(x) = e^{\int \frac{M_y - N_x}{N} dx}
+    }
+    \end{equation*}
+    \item \textbf{Case 2: $\mu = \mu(y)$ (function of only $y$)}.
+    Then if we rearrange for $\frac{d\mu}{dy}$, we have:
+    \begin{align*}
+    \mu_y M + \mu M_y &= \mu_x N + \mu N_x \\
+    \frac{d\mu}{dy} M + \mu M_y &= 0 + \mu N_x \\
+    \frac{d\mu}{dy} M &= \mu N_x - \mu M_y \\
+    \frac{1}{\mu} \frac{d\mu}{dy} &= \frac{N_x - M_y}{M} \\
+    \frac{d\mu}{dy} &= \mu \cdot \frac{N_x - M_y}{M}
+    \end{align*}
+    Then we can write the integrating factor as:
+    \begin{equation*}
+    \boxed{
+    \mu(y) = e^{\int \frac{N_x - M_y}{M} dy}
+    }
+    \end{equation*}
+\end{enumerate}
+
+\nt{
+    This method only works if we can find an integrating factor that is solely a function of $x$ or solely a function of $y$. So we must first check if either $\frac{M_y - N_x}{N}$ is a function of $x$ only or $\frac{N_x - M_y}{M}$ is a function of $y$ only.
+}
+
+\begin{mdframed}
+\subsection{Steps to solve non-exact equations using integrating factors}
+\begin{enumerate}
+    \item Compute $M_y$ and $N_x$.
+    \item Check if $\frac{M_y - N_x}{N}$ is a function of $x$ only or if $\frac{N_x - M_y}{M}$ is a function of $y$ only.
+    \item If $\frac{M_y - N_x}{N}$ is a function of $x$ only, compute the integrating factor:
+    \[
+        \mu(x) = e^{\int \frac{M_y - N_x}{N} dx}
+    \]
+    If $\frac{N_x - M_y}{M}$ is a function of $y$ only, compute the integrating factor:
+    \[
+        \mu(y) = e^{\int \frac{N_x - M_y}{M} dy}
+    \]
+    \item Multiply the original ODE by the integrating factor $\mu(x)$ or $\mu(y)$.
+    \item Verify that the new equation is exact by checking if the new $M_y = N_x$.
+    \item Solve the exact equation using the steps for exact equations.
+    \item (Optional) Apply any initial conditions to solve for constants of integration.
+\end{enumerate}
+\end{mdframed}
+\ex{}{
+    Find a general solution to the ODE:
+    \begin{equation*}
+    y + (2x - ye^y) \frac{dy}{dx} = 0
+    \end{equation*}
+}
+
+\sol{}{
+    \begin{enumerate}
+        \item We compute $M_y$ and $N_x$:
+        \begin{align*}
+        M(x, y) &= y \\
+        N(x, y) &= 2x - ye^y \\
+        M_y(x, y) &= 1 \\
+        N_x(x, y) &= 2
+        \end{align*}
+        Then this is not exact since $M_y \not = N_x$.
+        \item We check if $\frac{M_y - N_x}{N}$ is a function of $x$ only or if $\frac{N_x - M_y}{M}$ is a function of $y$ only:
+        \begin{align*}
+        \frac{M_y - N_x}{N} &= \frac{1 - 2}{2x - ye^y} = \frac{-1}{2x - ye^y} \quad \text{(not a function of $x$ only)} \\
+        \frac{N_x - M_y}{M} &= \frac{2 - 1}{y} = \frac{1}{y} \quad \text{(function of $y$ only)}
+        \end{align*}
+        \item We compute the integrating factor:
+        \begin{align*}
+        \mu(y) &= e^{\int \frac{1}{y} dy} \\
+        &= e^{\ln |y|} \\
+        &= |y|
+        \end{align*}
+        \item We multiply through by $\mu(y) = |y|$:
+        \begin{equation*}
+        y^2 + |y|(2x - ye^y) \frac{dy}{dx} = 0
+        \end{equation*}
+        \item We verify exactness by computing the new $M_y$ and $N_x$:
+        \begin{align*}
+        M(x, y) &= y^2 \\
+        N(x, y) &= |y|(2x - ye^y) \\
+        M_y(x, y) &= 2y \\
+        N_x(x, y) &= 2|y|
+        \end{align*}
+        Since $M_y = N_x$, the new equation is exact.
+        \item We solve the exact equation:
+        \begin{align*}
+        \Psi(x, y) &= \int y^2 \, dx + h(y) \\
+        &= x y^2 + h(y)
+        \end{align*}
+        Differentiating with respect to $y$ and setting equal to $N(x, y)$:
+        \begin{align*}
+        \Psi_y &= 2xy + h'(y) \\
+        2xy + h'(y) &= |y|(2x - ye^y) \\
+        h'(y) &= |y|(2x - ye^y) - 2xy \\
+        h'(y) &= -|y| ye^y \\
+        h'(y) &= -y^2 e^y \quad \text{(since $y^2 \geq 0$, we can drop the absolute value)}
+        \end{align*}
+        Integrating gives:
+        \begin{align*}
+        h(y) &= \int -y^2 e^y \, dy \\
+        &= -(y^2 - 2y + 2)e^y + K
+        \end{align*}
+        Substituting back into $\Psi(x, y)$:
+        \begin{equation*}
+        \Psi(x, y) = x y^2 - (y^2 - 2y + 2)e^y + K
+        \end{equation*}
+        Thus, the general solution is given implicitly by:
+        \begin{equation*}
+        \boxed{
+        x y^2 - (y^2 - 2y + 2)e^y = C
+        }
+        \end{equation*}
     \end{enumerate}
 }

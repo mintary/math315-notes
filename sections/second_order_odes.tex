@@ -1,0 +1,354 @@
+\chapter{Techniques for solving second-order ODEs}
+
+\section{Classical mechanics: mass-spring system}
+
+Consider a mass $m$ attached to a spring with spring constant $k$. It is also subject to an external force $F_{\text{ext}}$.
+
+\begin{center}
+\includegraphics[width=0.4\textwidth]{images/second_order_odes/mass_spring_system.png}
+\end{center}
+
+
+\vspace{0.2cm}
+
+Note that velocity is the first derivative of position with respect to time, denoted $\dot x(t)$, and acceleration is the second derivative of position with respect to time, denoted $\ddot x(t)$.
+
+Hooke's law gives the force exerted by the spring:
+\begin{equation*}
+F_{\text{spring}} = -k x, \quad k > 0
+\end{equation*}
+
+Then, by Newton's second law, the total force on the mass is equal to its mass times its acceleration:
+\begin{equation*}
+m \ddot x = F_{\text{spring}} + F_{\text{ext}}
+\end{equation*}
+Rearranging gives the second-order ODE:
+\begin{equation*}
+m \ddot x + k x = F_{\text{ext}}
+\end{equation*}
+
+We could also apply a damping force (such as friction) proportional to velocity, with damping coefficient $b$. We call this:
+\begin{equation*}
+F_{\text{damping}} = -b \dot x, \quad b > 0
+\end{equation*}
+
+Then the ODE becomes:
+\begin{equation*}
+m \ddot x + b \dot x + k x = F_{\text{ext}}
+\end{equation*}
+
+\dfn{Linear ODE}{
+    A linear ODE is one of the form:
+    \begin{equation*}
+    a_m x^{(m)} + a_{m-1} x^{(m-1)} + \cdots + a_1 \dot x + a_0 x = q(t)
+    \end{equation*}
+    where $a_0, a_1, \ldots, a_m$ are coefficients that may depend on $t$ but not on $x$ or its derivatives, and $q(t)$ is a function of $t$.
+
+    We call this a $m$-th order linear ODE.
+}
+
+In our mass-spring system, we will have two initial conditions.
+\begin{enumerate}
+    \item Initial position: $x(0) = x_0$
+    \item Initial velocity: $\dot x(0) = v_0$
+\end{enumerate}
+
+\ex{A special case}{
+    Consider a mass-spring system where $b = 0$ (no damping) and there is no external force ($F_{\text{ext}} = 0$). Solve the ODE:
+    \begin{equation*}
+    m \ddot x + k x = 0
+    \end{equation*}
+    with initial conditions $x(0) = x_0$ and $\dot x(0) = v_0$.
+}
+
+\sol{}{
+    Without knowing any specific methods, we rearrange the equation:
+    \begin{equation*}
+    \ddot x = -\frac{k}{m} x
+    \end{equation*}
+    So we need some function whose second derivative is proportional to the negative of the function itself. We know that sine and cosine functions have this property.
+
+    Try $x = \sin(\omega t)$, and differentiate several times:
+    \begin{align*}
+    \dot x &= \omega \cos(\omega t) \\
+    \ddot x &= -\omega^2 \sin(\omega t)
+    \end{align*}
+
+    Then substituting into the ODE gives:
+    \begin{equation*}
+    -m \omega^2 \sin(\omega t) + k \sin(\omega t) = 0
+    \end{equation*}
+
+    \begin{equation*}
+    \boxed{
+        x(t) = \sin(\omega t), \quad \text{where } \omega = \sqrt{\frac{k}{m}}
+    }
+    \end{equation*}
+
+    This is only a particular solution (you could try with cosine as well, and the general solution is a linear combination of both). Intuitively, the mass will oscillate back and forth indefinitely.
+}
+
+\thm{Superposition principle (applied to second-order linear ODEs)}{
+    For a linear ODE, if $x_1(t)$ and $x_2(t)$ are solutions to the homogeneous equation (i.e., when $q(t) = 0$), then any linear combination of these solutions is also a solution. That is:
+    \begin{equation*}
+    x(t) = C_1 x_1(t) + C_2 x_2(t)
+    \end{equation*}
+    is also a solution for any constants $C_1$ and $C_2$. The functions $x_1(t)$ and $x_2(t)$ are called the \textbf{modes} of the system.
+}
+\pf{Proof}{
+    Let $x_1(t)$ and $x_2(t)$ be solutions to the homogeneous equation:
+    \begin{equation*}
+    a_2 \ddot x + a_1 \dot x + a_0 x = 0
+    \end{equation*}
+
+    Then, substituting the potential solution $x(t) = C_1 x_1(t) + C_2 x_2(t)$:
+    \begin{align*}
+    a_2 \ddot x + a_1 \dot x + a_0 x &= a_2 \left( C_1 \ddot x_1 + C_2 \ddot x_2 \right) + a_1 \left( C_1 \dot x_1 + C_2 \dot x_2 \right) + a_0 \left( C_1 x_1 + C_2 x_2 \right) \\
+    &= C_1 \left( a_2 \ddot x_1 + a_1 \dot x_1 + a_0 x_1 \right) + C_2 \left( a_2 \ddot x_2 + a_1 \dot x_2 + a_0 x_2 \right) \\
+    &= C_1 \cdot 0 + C_2 \cdot 0 = 0
+    \end{align*}
+    Thus, $x(t) = C_1 x_1(t) + C_2 x_2(t)$ is also a solution.
+}
+
+\ex{General solution}{
+    Find the general solution to the ODE:
+    \begin{equation*}
+    m \ddot x + k x = 0
+    \end{equation*}
+}
+\sol{}{
+    From the previous example, we know that both $\sin(\omega t)$ and $\cos(\omega t)$ are solutions, where $\omega = \sqrt{\frac{k}{m}}$.
+
+    Therefore, by the superposition principle, the general solution is:
+    \begin{equation*}
+    \boxed{
+        x(t) = C_1 \cos(\omega t) + C_2 \sin(\omega t)
+    }
+    \end{equation*}
+    where $C_1$ and $C_2$ are constants determined by the initial conditions.
+}
+
+\nt{
+    The functions $\sin(\omega t)$ and $\cos(\omega t)$ are linearly independent because to transform one into another, you would need to add some factor in the argument (i.e., phase shift). This is not a scalar multiple transformation, so no linear transformation exists between them.
+}
+
+\section{Equations with constant coefficients}
+
+\subsection{Deriving the characteristic equation}
+
+We make the ansatz (educated guess) that the solution is of the form:
+\begin{equation*}
+x(t) = c e^{r t}
+\end{equation*}
+where $r$ is a constant to be determined. This guess is motivated by the fact that exponentials have the property that their derivatives are proportional to themselves (remember how we worked with the $\sin$ and $\cos$ functions earlier).
+
+We want to attempt to form a linear combination of such solutions.
+
+Recalling our equation of the form:
+\begin{equation*}
+m \ddot x + b \dot x + k x = 0
+\end{equation*}
+
+Substituting our ansatz into the ODE gives:
+\begin{equation*}
+m r^2 c e^{r t} + b r c e^{r t} + k c e^{r t} = 0
+\end{equation*}
+
+The trivial solution is $c = 0$, but we are interested in non-trivial solutions where $c \neq 0$. Dividing both sides by $c e^{r t}$ (which is never zero) gives the characteristic equation:
+\begin{equation*}
+m r^2 + b r + k = 0
+\end{equation*}
+
+This is the \textbf{characteristic equation} of the ODE. It can be observed that we will obtain two roots, or two \textbf{modes}. This makes sense - we expect two linearly independent solutions for a second-order ODE, with the general solution being a linear combination of these two solutions.
+
+\ex{}{
+    Find the general solution to the ODE:
+    \begin{equation*}
+        \ddot x + 5 \dot x + 4x  = 0
+    \end{equation*}
+
+    Then, find the specific solution satisfying the initial conditions $x(0) = 2$ and $\dot x(0) = -5$.
+}
+\sol{}{
+    We write this as 
+    \begin{equation*}
+        1 \cdot \ddot x + 5 \cdot \dot x + 4 \cdot x = 0
+    \end{equation*}
+    so that we can identify $m = 1$, $b = 5$, and $k = 4$.
+    Then, the characteristic equation is:
+    \begin{equation*}
+        P(s) = 1 \cdot s^2 + 5 \cdot s + 4 = 0
+    \end{equation*}
+    Solving for the roots, we have:
+    \begin{equation*}
+        r^2 + 5r + 4 = 0
+    \end{equation*}
+    Factoring gives:
+    \begin{equation*}
+        (r + 4)(r + 1) = 0
+    \end{equation*}
+    Thus, the roots are $r_1 = -4$ and $r_2 = -1$.
+
+    Therefore, the general solution is:
+    \begin{equation*}
+        \boxed{
+            x(t) = C_1 e^{-4t} + C_2 e^{-t}
+        }
+    \end{equation*}
+    where $C_1$ and $C_2$ are constants determined by initial conditions.
+
+    To find the specific solution, we apply the initial conditions:
+    \begin{align*}
+        x(0) &= C_1 e^{0} + C_2 e^{0} = C_1 + C_2 = 2 \quad (1) \\
+        \dot x(t) &= -4 C_1 e^{-4t} - C_2 e^{-t} \\
+        \dot x(0) &= -4 C_1 e^{0} - C_2 e^{0} = -4 C_1 - C_2 = -5 \quad (2)
+    \end{align*}
+    Solving equations (1) and (2):
+    From (1): $C_2 = 2 - C_1$.
+    Substituting into (2):
+    \begin{align*}
+        -4 C_1 - (2 - C_1) &= -5 \\
+        -4 C_1 - 2 + C_1 &= -5 \\
+        -3 C_1 - 2 &= -5 \\
+        -3 C_1 &= -3 \\
+        C_1 &= 1
+    \end{align*}
+    Then from (1):
+    \begin{equation*}
+        C_2 = 2 - 1 = 1
+    \end{equation*}
+    Thus, the specific solution is:
+    \begin{equation*}
+        \boxed{
+            x(t) = e^{-4t} + e^{-t}
+        }
+    \end{equation*}
+}
+
+With an equation of the form $m \ddot x + b \dot x + kx = 0$, we can summarize the types of solutions based on the discriminant $D = b^2 - 4mk$:
+\begin{itemize}
+    \item \textbf{Overdamped} ($D > 0$): Two distinct real roots, leading to solutions that decay exponentially without oscillating.
+    \[
+        x(t) = C_1 e^{r_1 t} + C_2 e^{r_2 t}
+    \]
+    \item \textbf{Critically damped} ($D = 0$): One repeated real root, leading to solutions that decay to zero as quickly as possible without oscillating.
+    \[
+        x(t) = C_1 e^{r t} + C_2 t e^{r t}
+    \]
+    \item \textbf{Underdamped} ($D < 0$): Complex conjugate roots, leading to \textbf{oscillatory} solutions that decay exponentially.
+\end{itemize}
+
+\subsection{Review of complex numbers}
+\nt{
+    The lectures started from the introduction of $i^2 = -1$. These notes skip ahead to the parts more relevant to ODEs.
+}
+
+\dfn{Argument of a complex number}{
+    The \textbf{argument} of a complex number $z = a + bi$ is the angle $\theta$ formed with the positive real axis in the complex plane. It is denoted as $\arg(z)$.
+
+    The argument can be calculated using the arctangent function:
+    \begin{equation*}
+    \theta = \tan^{-1}\left(\frac{b}{a}\right)
+    \end{equation*}
+}
+
+Some useful properties of complex numbers and their arguments:
+\begin{align*}
+    | z_1 z_2 | &= |z_1| |z_2| \\
+    \arg(z_1 z_2) &= \arg(z_1) + \arg(z_2) \\
+    \arg(z^n) &= n \arg(z) \\
+\end{align*}
+
+
+We can parametrize a complex number on the unit circle by letting $t = \arg(z)$:
+\begin{equation*}
+z = \cos t + i \sin t
+\end{equation*}
+
+Then, differentiating:
+\begin{equation*}
+\dot z = -\sin t + i \cos t
+\end{equation*}
+
+This then implies a useful identity:
+\begin{equation*}
+\boxed{
+    \dot z = i z
+}
+\end{equation*}
+
+Solving this ODE gives:
+\begin{equation*}
+z(t) = z(0) e^{i t}
+\end{equation*}
+
+\textbf{Euler's identity} states that:
+\begin{equation*}
+\boxed{
+    e^{i t} = \cos t + i \sin t
+}
+\end{equation*}
+
+This is useful because it allows us to express trigonometric functions in terms of exponentials.
+
+Another interesting identity arises when we set $t = \pi$:
+\begin{equation*}
+    e^{i \pi} + 1 = 0
+\end{equation*}
+
+Now, consider a complex number $z = a + bi$. We have that:
+\begin{align*}
+\dot z &= (a+bi) z \\
+z(t) &= z(0) e^{(a+bi)t} \\
+&= z(0) e^{at} (\cos bt + i \sin bt)
+\end{align*}
+
+where $e^{at}$ represents the magnitude (scaling) and $\cos bt + i \sin bt$ represents the rotation in the complex plane (argument).
+
+Another useful property of complex numbers:
+\begin{equation*}
+\boxed{
+    \text{Re}(z) = \frac{1}{2} (z + \overline{z}) 
+}
+\end{equation*}
+
+\begin{equation*}
+\boxed{
+    \text{Im}(z) = \frac{1}{2i} (z - \overline{z})
+}
+\end{equation*}
+
+where $\overline{z} = a - bi$ is the complex conjugate of $z = a + bi$.
+
+Then we define $\cos$ and $\sin$ in terms of exponentials:
+\begin{equation*}
+\boxed{
+    \cos t = \frac{1}{2}\left( e^{i t} + e^{-i t} \right)
+}
+\end{equation*}
+\begin{equation*}
+\boxed{
+    \sin t = \frac{1}{2i} \left( e^{i t} - e^{-i t} \right)
+}
+\end{equation*}
+
+\thm{}{
+    If $z$ is a complex-valued solution to $m \ddot z + b \dot z + k z = 0$, then both the real part $\text{Re}(z)$ and the imaginary part $\text{Im}(z)$ are also solutions to the ODE.
+}
+
+\pf{Proof}{
+This should not be surprising. If we write $z = u(t) + iv(t)$ where $u(t) = \text{Re}(z)$ and $v(t) = \text{Im}(z)$, then substituting into the ODE gives:
+\begin{align*}
+m \ddot z + b \dot z + k z &= m (\ddot u + i \ddot v) + b (\dot u + i \dot v) + k (u + i v) \\
+&= (m \ddot u + b \dot u + k u) + i (m \ddot v + b \dot v + k v)
+\end{align*}
+
+We basically get two separate equations, corresponding to the real and imaginary parts:
+\begin{align*}
+m \ddot u + b \dot u + k u &= 0 \\
+m \ddot v + b \dot v + k v &= 0
+\end{align*}
+
+Since $z$ is a solution, both parts must equal zero. Thus, both $\text{Re}(z)$ and $\text{Im}(z)$ are solutions to the ODE.
+
+}
