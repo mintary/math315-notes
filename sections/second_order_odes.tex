@@ -161,6 +161,8 @@ m r^2 + b r + k = 0
 
 This is the \textbf{characteristic equation} of the ODE. It can be observed that we will obtain two roots, or two \textbf{modes}. This makes sense - we expect two linearly independent solutions for a second-order ODE, with the general solution being a linear combination of these two solutions.
 
+\subsection{Distinct real roots}
+
 \ex{}{
     Find the general solution to the ODE:
     \begin{equation*}
@@ -332,6 +334,8 @@ Then we define $\cos$ and $\sin$ in terms of exponentials:
 }
 \end{equation*}
 
+\subsection{Complex roots}
+
 \thm{}{
     If $z$ is a complex-valued solution to $m \ddot z + b \dot z + k z = 0$, then both the real part $\text{Re}(z)$ and the imaginary part $\text{Im}(z)$ are also solutions to the ODE.
 }
@@ -352,3 +356,230 @@ m \ddot v + b \dot v + k v &= 0
 Since $z$ is a solution, both parts must equal zero. Thus, both $\text{Re}(z)$ and $\text{Im}(z)$ are solutions to the ODE.
 
 }
+
+We can observe that an oscillatory solution arises when the roots of the characteristic equation are complex conjugates. To derive this, we use the second-order ODE:
+\begin{equation*}
+r_1 = a + bi, \quad r_2 = a - bi
+\end{equation*}
+
+Extracting the real and imaginary parts gives us two linearly independent solutions:
+\begin{align*}
+x_1(t) &= e^{(a + bi)t} = e^{a t} \cos(b t) \\
+x_2(t) &= e^{(a - bi)t} = e^{a t} \sin(b t)
+\end{align*}
+
+So the general solution is a linear combination of these two solutions (where $a$ determines the exponential decay or growth - the real part, and $b$ determines the frequency of oscillation - the imaginary part):
+\begin{equation*}
+\boxed{
+    x(t) = C_1 e^{a t} \cos(b t) + C_2 e^{a t} \sin(b t)
+}
+\end{equation*}
+
+We can also represent this as a phase shifted cosine function:
+\begin{equation*}
+\boxed{
+    x(t) = A e^{a t} \cos(b t - \phi)
+}
+\end{equation*}
+
+where $A$ is the amplitude and $\phi$ is the phase shift, which can be determined from the constants $C_1$ and $C_2$. Formulas for $A$ and $\phi$ are:
+\begin{equation*}
+\boxed{
+A = \sqrt{C_1^2 + C_2^2}
+}
+\end{equation*}
+
+\begin{equation*}
+\boxed{
+\phi = \tan^{-1}\left( \frac{C_2}{C_1} \right)
+}
+\end{equation*}
+
+The identity used to get this phase shift:
+\begin{align*}
+\cos(\alpha - \beta) &= \cos \alpha \cos \beta + \sin \alpha \sin \beta \\
+&= \frac{C_1}{A} \cos b t + \frac{C_2}{A} \sin b t
+\end{align*}
+
+\ex{}{
+    Find the general solution to the ODE:
+    \begin{equation*}
+        \ddot x + 4 \dot x + 5x = 0
+    \end{equation*}
+}
+
+\sol{}{
+    We write this as 
+    \begin{equation*}
+        1 \cdot \ddot x + 4 \cdot \dot x + 5 \cdot x = 0
+    \end{equation*}
+    so that we can identify $m = 1$, $b = 4$, and $k = 5$.
+    Then, the characteristic equation is:
+    \begin{equation*}
+        P(s) = 1 \cdot s^2 + 4 \cdot s + 5 = 0
+    \end{equation*}
+    Solving for the roots, we have:
+    \begin{equation*}
+        r^2 + 4r + 5 = 0
+    \end{equation*}
+    Using the quadratic formula:
+    \begin{equation*}
+        r = \frac{-4 \pm \sqrt{16 - 20}}{2} = -2 \pm i
+    \end{equation*}
+    Thus, the roots are $r_1 = -2 + i$ and $r_2 = -2 - i$.
+    Therefore, the general solution is:
+    \begin{equation*}
+        \boxed{
+            x(t) = e^{-2t} (C_1 \cos t + C_2 \sin t)
+        }
+    \end{equation*}
+    We can also express this as a phase shifted cosine function:
+    \begin{equation*}
+        \boxed{
+            x(t) = A e^{-2t} \cos(t - \phi)
+        }
+    \end{equation*}
+}
+
+\subsection{Repeated roots}
+
+Let $P(D)$ be the polynomial differential operator associated with a linear ODE, where $Q$ is a polynomial with no repeated roots.
+If $r$ is a root of multiplicity $m$ of the characteristic polynomial $P(\lambda)$,
+then
+\[
+P(\lambda) = (\lambda - r)^m Q(\lambda)
+\quad\Rightarrow\quad
+P(D) = (D - r)^m Q(D).
+\]
+
+Since $Q(r)\neq 0$:
+\[
+(D-r)^m y = 0.
+\]
+
+Solving successively,
+\begin{align*}
+(D-r) y &= 0 \\
+Dy - r y &= 0 \\
+\frac{dy}{dt} &= r y \\
+y &= e^{rt}
+\end{align*}
+and each additional application of $(D-r)^{-1}$ introduces a factor of $t$.
+Hence the $m$ linearly independent solutions are
+\[
+e^{rt},\; t e^{rt},\; t^2 e^{rt},\; \ldots,\; t^{m-1} e^{rt}.
+\]
+
+\ex{}{
+    Find the general solution to the ODE:
+    \begin{equation*}
+        \ddot x - 4 \dot x + 4x = 0
+    \end{equation*}
+}
+
+\sol{}{
+    We write this as 
+    \begin{equation*}
+        1 \cdot \ddot x - 4 \cdot \dot x + 4 \cdot x = 0
+    \end{equation*}
+    so that we can identify $m = 1$, $b = -4$, and $k = 4$.
+    Then, the characteristic equation is:
+    \begin{equation*}
+        P(s) = 1 \cdot s^2 - 4 \cdot s + 4 = 0
+    \end{equation*}
+    Solving for the roots, we have:
+    \begin{equation*}
+        r^2 - 4r + 4 = 0
+    \end{equation*}
+    Factoring gives:
+    \begin{equation*}
+        (r - 2)^2 = 0
+    \end{equation*}
+    Thus, there is a repeated root at $r = 2$.
+
+    Therefore, the general solution is:
+    \begin{equation*}
+        \boxed{
+            x(t) = C_1 e^{2t} + C_2 t e^{2t}
+        }
+    \end{equation*}
+}
+
+\subsection{Non-homogeneous equations}
+
+We were previous using $m\ddot x + b \ddot x + kx = 0$ to represent a situation where a mass is attached to a spring with no external damping force.
+
+If we introduce an external force $F_{\text{ext}}$, then the ODE becomes:
+\begin{equation*}
+m \ddot x + b \dot x + k x = F_{\text{ext}}
+\end{equation*}
+
+We know the solution to the homogeneous equation. Also, if $b=0$, we can define the \textbf{natural frequency} as:
+\begin{equation*}
+w_m = \sqrt{\frac{k}{m}}
+\end{equation*}
+
+such that the solution is:
+\begin{equation*}
+x(t) = C_1 \cos(w_m t) + C_2 \sin(w_m t) \quad \text{from the characteristic equation solved via the quadratic formula}
+\end{equation*}
+
+And if $b \neq 0$, we can define the \textbf{damped frequency} as:
+\begin{equation*}
+w_d = \sqrt{\frac{k}{m} - \frac{b^2}{4 m^2}} \quad \text{from the characteristic equation solved via the quadratic formula}
+\end{equation*}
+
+such that the solution is:
+\begin{equation*}
+x(t) = e^{-\frac{b}{2m} t} (C_1 \cos(w_d t) + C_2 \sin(w_d t))
+\end{equation*}
+
+We standardize the homogeneous solution as $x_h(t)$:
+\begin{equation*}
+\ddot x + \frac{b}{m} \dot x + w_m^2 x = 0
+\end{equation*}
+
+where $w_m$ is the natural frequency.
+
+\thm{}{
+    If $x_p(t)$ is a particular solution to the non-homogeneous equation $m \ddot x + b \dot x + k x = F_{\text{ext}}$, then the general solution is given by:
+    \begin{equation*}
+    x(t) = x_h(t) + x_p(t)
+    \end{equation*}
+    where $x_h(t)$ is the general solution to the corresponding homogeneous equation.
+}
+\pf{Proof}{
+    Let $x_h(t)$ be the general solution to the homogeneous equation:
+    \begin{equation*}
+    m \ddot x + b \dot x + k x = 0
+    \end{equation*}
+
+    Then, we can write the general solution to the non-homogeneous equation as:
+    \begin{equation*}
+    x(t) = x_h(t) + x_p(t)
+    \end{equation*}
+
+    Substituting into the non-homogeneous equation gives:
+    \begin{align*}
+    m \ddot x + b \dot x + k x &= m (\ddot x_h + \ddot x_p) + b (\dot x_h + \dot x_p) + k (x_h + x_p) \\
+    &= (m \ddot x_h + b \dot x_h + k x_h) + (m \ddot x_p + b \dot x_p + k x_p) \\
+    &= 0 + F_{\text{ext}} = F_{\text{ext}}
+    \end{align*}
+
+    Thus, $x(t) = x_h(t) + x_p(t)$ is indeed a solution to the non-homogeneous equation. Since $x_h(t)$ represents the general solution to the homogeneous equation, this form captures all possible solutions to the non-homogeneous equation.
+}
+
+\begin{mdframed}
+\subsection{Steps to solve a non-homogeneous linear ODE}
+\begin{enumerate}
+    \item Find the homogeneous solution $x_h(t)$ by solving the characteristic equation.
+    \item Find a particular solution $x_p(t)$ using an appropriate method (e.g., undetermined coefficients, variation of parameters).
+    \item Combine the homogeneous and particular solutions to get the general solution:
+    \begin{equation*}
+    x(t) = x_h(t) + x_p(t)
+    \end{equation*}
+    \item (Optional) Apply initial conditions to find the specific solution if needed.
+\end{enumerate}
+\end{mdframed}
+
+\subsection{Variation of parameters}
