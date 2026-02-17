@@ -505,7 +505,7 @@ e^{rt},\; t e^{rt},\; t^2 e^{rt},\; \ldots,\; t^{m-1} e^{rt}.
     \end{equation*}
 }
 
-\subsection{Non-homogeneous equations}
+\section{Non-homogeneous equations}
 
 We were previous using $m\ddot x + b \ddot x + kx = 0$ to represent a situation where a mass is attached to a spring with no external damping force.
 
@@ -582,4 +582,437 @@ where $w_m$ is the natural frequency.
 \end{enumerate}
 \end{mdframed}
 
-\subsection{Variation of parameters}
+\subsection{Method of undetermined coefficients}
+
+Suppose that we have a non-homogeneous ODE of the form:
+\begin{equation*}
+m \ddot x + b \dot x + k x = F_{\text{ext}}(t)
+\end{equation*}
+
+We suppose that $F_{\text{ext}}(t) = k y(t)$ where $y(t)$ is a known function. We also consider the case with no damping first ($b=0$):
+\begin{equation*}
+m \ddot x + k x = k y(t)
+\end{equation*}
+
+Rearranging gives:
+\begin{equation*}
+m \ddot x + k (x - y) = 0
+\end{equation*}
+
+We think of $x-y$ as the deviation from the equilibrium position $y$. From a physical perspective, the system will oscillate around the equilibrium position $y$, which sets some natural frequency of oscillation. 
+\begin{equation*}
+y(t) = A \cos(\omega t)
+\end{equation*}
+
+Then inputting wih $\omega_m = \sqrt{\frac{k}{m}}$ gives:
+\begin{equation*}
+\ddot x + \omega_m^2 x = \omega_m^2 A \cos(\omega t)
+\end{equation*}
+
+Seeing the $\cos$ term, we guess a particular solution of the form:
+\begin{equation*}
+x_p(t) = B \cos (\omega t)
+\end{equation*}
+
+Plugging this into the ODE gives:
+\begin{align*}
+x_p(t) &= B \cos (\omega t) \\
+\ddot x_p &= -B \omega^2 \cos (\omega t) \\
+-B \omega^2 \cos (\omega t) + \omega_m^2 B \cos (\omega t) &= \omega_m^2 A \cos(\omega t) \\
+\end{align*}
+
+This is true if:
+\begin{equation*}
+\boxed{
+B = \frac{\omega_m^2}{\omega_m^2 - \omega^2} A
+}
+\end{equation*}
+
+where $\omega_m$ is the natural frequency of the system and $\omega$ is the frequency of the external force. We can see that if $\omega$ is close to $\omega_m$, then $B$ becomes very large, which corresponds to the phenomenon of \textbf{resonance}. In reality, with $\omega_m = \omega$, we would need to modify our guess. We will later see how to deal with resonance.
+
+In general, if $F_{\text{ext}}(t) = A \cos (\omega t) + B \sin (\omega t)$ appears to be a sinusoidal function, we can guess:
+\begin{equation*}
+x_p(t) = C \cos (\omega t) + D \sin (\omega t)
+\end{equation*}
+
+Then, we can plug this into the ODE and solve for $C$ and $D$.
+
+\subsection{Exponential inputs}
+Similarly, we can have $F_{\text{ext}}(t) = A e^{r t}$, which gives:
+\begin{equation*}
+m \ddot x + b \dot x + k x = A e^{r t}
+\end{equation*}
+
+Then, we can guess a particular solution of the form:
+\begin{equation*}
+x_p(t) = B e^{r t}
+\end{equation*}
+
+Plugging this into the ODE gives:
+\begin{align*}
+x_p(t) &= B e^{r t} \\
+\dot x_p &= r B e^{r t} \\
+\ddot x_p &= r^2 B e^{r t} \\
+m r^2 B e^{r t} + b r B e^{r t} + k B e^{r t} &= A e^{r t}
+\end{align*}
+
+So we can see that to solve for $B$, we can divide both sides by $e^{r t}$ (which is never zero) to get:
+\begin{equation*}
+B = \frac{A}{m r^2 + b r + k}
+\end{equation*}
+
+\nt{
+    In general, when we have an $m^{\text{th}}$ order ODE, we can use a similar approach to find particular solutions for exponential inputs. We have:
+    \begin{equation*}
+        a_m x^{(m)} + a_{m-1} x^{(m-1)} + \cdots + a_1 \dot x + a_0 x = A e^{r t}
+    \end{equation*}
+    Then, we apply the function:
+    \begin{equation*}
+        P(r) = a_m r^m + a_{m-1} r^{m-1} + \cdots + a_1 r + a_0
+    \end{equation*}
+}
+
+We have thus obtained the \textbf{exponential response formula (ERF)}:
+\begin{equation*}
+\boxed{
+    x_p(t) = \frac{A e^{r t}}{p(r)} \quad \text{where } p(r) = a_m r^m + a_{m-1} r^{m-1} + \cdots + a_1 r + a_0 \quad p(r) \neq 0
+}
+\end{equation*}
+
+\ex{}{
+    Find the particular solution of:
+    \begin{equation*}
+        \ddot x + \dot x + 2x = 4e^{3t}
+    \end{equation*}
+
+    Then find the general solution.
+}
+\sol{}{
+    We can identify the homogeneous part of the ODE as:
+    \begin{equation*}
+        \ddot x + \dot x + 2x = 0
+    \end{equation*}
+    The characteristic equation is:
+    \begin{equation*}
+        r^2 + r + 2 = 0
+    \end{equation*}
+    Solving for the roots gives:
+    \begin{equation*}
+        r = \frac{-1 \pm \sqrt{1 - 8}}{2} = -\frac{1}{2} \pm i \frac{\sqrt{7}}{2}
+    \end{equation*}
+    Thus, the homogeneous solution is:
+    \begin{equation*}
+        x_h(t) = e^{-\frac{1}{2} t} \left( C_1 \cos\left( \frac{\sqrt{7}}{2} t \right) + C_2 \sin\left( \frac{\sqrt{7}}{2} t \right) \right)
+    \end{equation*}
+
+    For the particular solution, we can apply the exponential response formula:
+    \begin{equation*}
+        p(r) = r^2 + r + 2
+    \end{equation*}
+
+    Then, evaluating at $r = 3$ gives:
+    \begin{equation*}
+        p(3) = 3^2 + 3 + 2 = 14
+    \end{equation*}
+
+    Thus, the particular solution is:
+    \begin{equation*}
+        x_p(t) = \frac{4 e^{3t}}{14} = \frac{2}{7} e^{3t}
+    \end{equation*}
+    
+    Finally, the general solution is:
+    \begin{equation*}
+        \boxed{
+            x(t) = e^{-\frac{1}{2} t} \left( C_1 \cos\left( \frac{\sqrt{7}}{2} t \right) + C_2 \sin\left( \frac{\sqrt{7}}{2} t \right) \right) + \frac{2}{7} e^{3t}
+        }
+    \end{equation*}
+}
+
+
+\ex{}{
+    Find the particular solution of:
+    \begin{equation*}
+        \ddot x + \dot x + 2x = \cos t
+    \end{equation*}
+
+}
+\sol{}{
+    We first complexify the equation as:
+    \begin{equation*}
+        \ddot z + \dot z + 2z = e^{i t}
+    \end{equation*}
+
+    It is possible to do this because the real and imaginary parts of the solution will also be solutions to the original equation, so we can extract the real part at the end to get the particular solution.
+
+    \begin{equation*}
+        p(s) = s^2 + s + 2
+    \end{equation*}
+
+    Then evaluating at $s = i$ gives:
+    \begin{equation*}
+        p(i) = i^2 + i + 2 = 1 + i
+    \end{equation*}
+
+    Applying ERF gives:
+    \begin{equation*}
+        z_p(t) = \frac{e^{i t}}{1 + i} = \frac{1 - i}{2} e^{i t} = \frac{1}{2} (1-i) e^{it}
+    \end{equation*}
+
+    Thus the particular solution to this complexified equation is:
+    \begin{align*}
+        z_p(t) &= \frac{1}{2} e^{i t} - \frac{i}{2} e^{i t} \\
+        &= \frac{1}{2} (\cos t + i \sin t) - \frac{i}{2} (\cos t + i \sin t) \\
+        &= \frac{1}{2} \cos t + \frac{i}{2} \sin t - \frac{i}{2} \cos t + \frac{1}{2} \sin t \\
+        &= \frac{1}{2} (\cos t + \sin t) + i\left( \frac{1}{2} (\sin t - \cos t)  \right)
+    \end{align*}
+
+    We can then extract the real part to get the particular solution to the original equation:
+    \begin{align*}
+        x_p(t) &= \text{Re}(z_p(t)) \\
+        &= \frac{1}{2} \cos t + \frac{1}{2} \sin t  \\
+        &= \frac{\sqrt{2}}{2} \cos\left( t - \frac{\pi}{4} \right)
+    \end{align*}
+
+}
+
+\section{Resonance}
+
+An operator takes one function as input and produces another function as output. For example, the operator $D$ takes a function $f(t)$ and produces its derivative $\dot f(t)$. We can also have higher-order operators like $D^2$ which takes a function and produces its second derivative.
+
+The \textbf{identity operator} $I$ is:
+\begin{equation*}
+I x = x
+\end{equation*}
+
+We can take linear combinations of operators. For example:
+\begin{align*}
+(D^2 + 2D + 2I)x &= \ddot x + 2 \dot x + 2x
+\end{align*}
+
+The characteristic polynomial associated with this operator is:
+\begin{equation*}
+p(s) = s^2 + 2s + 2
+\end{equation*}
+
+Meanwhile, $P(D)$ represents the linear combination of operators:
+\begin{equation*}
+p(D) = D^2 + 2D + 2I
+\end{equation*}
+
+Then, we can write the ODE as:
+\begin{equation*}
+p(D) x
+\end{equation*}
+
+Now consider an input function $q(t)$, which gives us the non-homogeneous ODE:
+\begin{equation*}
+a_n x^{(n)} + a_{n-1} x^{(n-1)} + \cdots + a_1 \dot x + a_0 x = q(t)
+\end{equation*}
+
+We extract the characteristic polynomial:
+\begin{equation*}
+p(s) = a_n s^n + a_{n-1} s^{n-1} + \cdots + a_1 s + a_0
+\end{equation*}
+
+Then, we can write the ODE as:
+
+\begin{equation*}
+p(D) x = q(t)
+\end{equation*}
+
+So the operator $p(D)$ represents the system with $x(t)$ as the response, and the input is represented by $q(t)$. 
+
+Let $Lx = q$ for some operator $L$. Our goal is to find the inverse operator $L^{-1}$ such that:
+\begin{equation*}
+x = L^{-1} q
+\end{equation*}
+
+Recall the ERF which solves $p(D) x = A e^{r t}$ for two conditions:
+\begin{enumerate}
+    \item $p(r) \neq 0$.
+    \item $A$ constant.
+\end{enumerate}
+
+We note that if on the LHS we found the characteristic polynomial $p(s)$ with roots $r_1, r_2, \ldots, r_n$, but on the RHS we have $q(t) = A e^{r t}$ where $r$ is one of the roots of $p(s)$, then we have a problem because $p(r) = 0$, which means that the ERF does not apply. This corresponds to the phenomenon of \textbf{resonance}.
+
+So we have that $p(D)x = A e^{rt}$ where $p(r) = 0$. We'd like to make the function $p(D)$ more explicit to find some way to solve for a particular solution.
+
+We repeatedly apply $D$ to $e^{rt}$:
+\begin{align*}
+I e^{rt} &= e^{rt} \\
+D e^{rt} &= r e^{rt} \\
+D^2 e^{rt} &= r^2 e^{rt} \\
+\vdots \\
+D^n e^{rt} &= r^n e^{rt} \\
+p(D) e^{rt} &= p(r) e^{rt} = 0
+\end{align*}
+
+By the ERF, $x p(t) = \frac{1}{p(r)} e^{rt}$ is a particular solution. But $P(D) e^{rt} = p(r) e^{rt}$ is true even if $p(r) = 0$.
+
+We start from the key identity:
+\begin{equation*}
+p(D) e^{rt} = p(r) e^{rt}
+\end{equation*}
+
+Then we differentiate both sides with respect to $r$:
+\begin{equation*}
+\frac{\partial}{\partial r} \left[ p(D) e^{rt} \right] = \frac{\partial}{\partial r} \left[ p(r) e^{rt} \right]
+\end{equation*}
+
+The operator $p(D)$ does not depend on $r$, so we can pull it out of the derivative:
+\begin{equation*}
+p(D) \frac{\partial}{\partial r} e^{rt} = p'(r) e^{rt} + p(r) t e^{rt}
+\end{equation*}
+
+Since $p(r) = 0$, this simplifies to:
+\begin{equation*}
+p(D) \frac{\partial}{\partial r} e^{rt} = p'(r) e^{rt}
+\end{equation*}
+
+Now we get the partial derivative of $e^{rt}$ with respect to $r$:
+\begin{equation*}
+\frac{\partial}{\partial r} e^{rt} = t e^{rt}
+\end{equation*}
+
+Thus, we have:
+\begin{equation*}
+p(D) (t e^{rt}) = p'(r) e^{rt}
+\end{equation*}
+
+Comparing this to the original equation $p(D) x = A e^{rt}$, we can see that if we let $x = \frac{A}{p'(r)} t e^{rt}$, then we have:
+\begin{equation*}
+p(D) \left( \frac{A}{p'(r)} t e^{rt} \right) = A e^{rt}
+\end{equation*}
+
+Thus, we now have a formula for the particular solution in the case of resonance:
+\begin{equation*}
+\boxed{
+    x_p(t) = \frac{A}{p'(r)} t e^{rt} \quad \text{where } p(r) = 0
+}
+\end{equation*}
+
+\subsection{Generalization to higher-order ODEs}
+
+We might have a case where $p(r) = 0$, but also $p'(r) = 0$. In this case, we can differentiate the key identity again:
+\begin{equation*}
+\frac{\partial^2}{\partial r^2} \left[ p(D) e^{rt} \right] = \frac{\partial^2}{\partial r^2} \left[ p(r) e^{rt} \right]
+\end{equation*}
+
+This gives us:
+\begin{equation*}
+p(D) \frac{\partial^2}{\partial r^2} e^{rt} = p''(r) e^{rt} + 2 p'(r) t e^{rt} + p(r) t^2 e^{rt}
+\end{equation*}
+
+Since $p(r) = 0$ and $p'(r) = 0$, this simplifies to:
+\begin{equation*}
+p(D) \frac{\partial^2}{\partial r^2} e^{rt} = p''(r) e^{rt}
+\end{equation*}
+
+Now we get the second partial derivative of $e^{rt}$ with respect to $r$:
+\begin{equation*}
+\frac{\partial^2}{\partial r^2} e^{rt} = t^2 e^{rt}
+\end{equation*}
+
+Thus, we have:
+\begin{equation*}
+p(D) (t^2 e^{rt}) = p''(r) e^{rt}
+\end{equation*}
+
+In general, the \textbf{generalized exponential response formula} for the case of resonance is:
+\begin{equation*}
+\boxed{
+    x_p(t) = \frac{A}{p^{(m+1)}(r)} t^{m+1} e^{rt} \quad \text{where } p(r) = p'(r) = \cdots = p^{(m)}(r) = 0
+}
+\end{equation*}
+
+\ex{}{
+    Find the particular solution of:
+    \begin{equation*}
+    \ddot x - 4x = e^{-2t}
+    \end{equation*}
+}
+
+\sol{}{
+    We first find the homogeneous solution by solving the characteristic equation:
+    \begin{equation*}
+r^2 - 4 = 0
+    \end{equation*}
+    which gives us the roots $r = 2$ and $r = -2$. Thus, the homogeneous solution is:
+    \begin{equation*}
+x_h(t) = C_1 e^{2t} + C_2 e^{-2t}
+    \end{equation*}
+
+    We see that $-2$ is a root of the characteristic polynomial, so we have resonance. We can apply the generalized exponential response formula to find the particular solution:
+    \begin{equation*}
+p(r) = r^2 - 4
+    \end{equation*}
+
+    Then we compute $p'(-2)$:
+\begin{equation*}
+p'(r) = 2r \quad \Rightarrow \quad p'(-2) = -4
+\end{equation*}
+
+Thus, the particular solution is:
+\begin{equation*}
+x_p(t) = \frac{1}{p'(-2)} t e^{-2t} = -\frac{1}{4} t e^{-2t}
+\end{equation*}
+
+
+}
+
+\nt{
+    From a physical perspective, although we are at resonance, the particular solution does decay as $t$ increases, which is a consequence of the fact that the input function $e^{-2t}$ also decays as $t$ increases. If we had an input function that did not decay, then we would have a particular solution that grows without bound as $t$ increases, which is the classical notion of resonance.
+}
+
+
+\ex{}{
+    Find the particular solution of:
+    \begin{equation*}
+        \ddot x + 4x = \cos(2t)
+    \end{equation*}
+}
+
+\sol{}{
+    We first find the homogeneous solution by solving the characteristic equation:
+    \begin{equation*}
+r^2 + 4 = 0
+    \end{equation*}
+    which gives us the roots $r = 2i$ and $r = -2i$. Thus, the homogeneous solution is:
+    \begin{equation*}
+x_h(t) = C_1 \cos(2t) + C_2 \sin(2t)
+    \end{equation*}
+
+    Complexifying the equation gives us:
+    \begin{equation*}
+        \ddot z + 4z = e^{2it}
+    \end{equation*}
+
+    And hence we see that $2i$ is a root of the characteristic polynomial, so we have resonance. We can apply the generalized exponential response formula to find the particular solution:
+    \begin{equation*}
+p(r) = r^2 + 4
+    \end{equation*}
+
+    Then we compute $p'(2i)$:
+\begin{equation*}
+p'(r) = 2r \quad \Rightarrow \quad p'(2i) = 4i
+\end{equation*}
+
+Thus, the particular solution to the complexified equation is:
+\begin{align*}
+z_p(t) &= \frac{te^{2it}}{4i}  \\
+&= \frac{t}{4i} (\cos(2t) + i \sin(2t)) \\
+&= \frac{t}{4} \sin(2t) - \frac{t}{4} i \cos(2t)
+\end{align*}
+
+Then we can extract the real part to get the particular solution to the original equation:
+\begin{equation*}
+x_p(t) = \frac{t}{4} \sin(2t)
+\end{equation*}
+
+This solution grows without bound as $t$ increases, which is the classical notion of resonance.
+
+    
+}
+
+
+TBA: reduction of order, variation of parameters, intro to Fourier series
