@@ -775,7 +775,7 @@ We have thus obtained the \textbf{exponential response formula (ERF)}:
 
 }
 
-\section{Resonance}
+\subsection{Resonance}
 
 An operator takes one function as input and produces another function as output. For example, the operator $D$ takes a function $f(t)$ and produces its derivative $\dot f(t)$. We can also have higher-order operators like $D^2$ which takes a function and produces its second derivative.
 
@@ -891,7 +891,7 @@ Thus, we now have a formula for the particular solution in the case of resonance
 }
 \end{equation*}
 
-\subsection{Generalization to higher-order ODEs}
+\subsection{Generalization of resonance to higher-order ODEs}
 
 We might have a case where $p(r) = 0$, but also $p'(r) = 0$. In this case, we can differentiate the key identity again:
 \begin{equation*}
@@ -1015,4 +1015,75 @@ This solution grows without bound as $t$ increases, which is the classical notio
 }
 
 
-TBA: reduction of order, variation of parameters, intro to Fourier series
+\subsection{Reduction of order}
+
+Second-order ODEs may also have the form:
+\begin{equation*}
+p(t) \ddot x + q(t) \dot x + r(t) x = 0
+\end{equation*}
+
+\ex{}{
+    Find the general solution to the ODE:
+    \begin{equation*}
+    \ddot x + \dot x = t
+    \end{equation*}
+}
+\sol{}{
+    We first find the homogeneous solution by solving the characteristic equation:
+    \begin{align*}
+    p(s) = s^2 + s = 0 \\
+s(s + 1) = 0 
+    \end{align*}
+which gives us the roots $r = 0$ and $r = -1$. Thus, the homogeneous solution is:
+    \begin{equation*}
+x_h(t) = C_1 + C_2 e^{-t}
+    \end{equation*}
+
+    We can use a substitution $u = \dot x $ to reduce the order of the ODE. Then we have $\dot u = \ddot x$, so we can rewrite the ODE as:
+\begin{equation*}
+\dot u + u = t
+\end{equation*}
+
+Then if we guess $u = At + B$, and $\dot u = A$, we can plug this into the ODE to get:
+\begin{align*}
+A + At + B &= t \\
+A &= 1 \\
+B &= -1
+\end{align*}
+
+Thus, we have $u(t) = t - 1$, and so $x(t) = \int u(t) dt = \int (t - 1) dt = \frac{t^2}{2} - t + C_3$. We just let $C_3 = 0$ since it is already captured by the homogeneous solution. Thus, the particular solution is:
+\begin{equation*}
+x_p(t) = \frac{t^2}{2} - t
+\end{equation*}
+
+Finally, the general solution is:
+\begin{equation*}
+\boxed{
+x(t) = C_1 + C_2 e^{-t} + \frac{t^2}{2} - t
+}
+\end{equation*}
+
+
+\subsection{Variation of parmeters}
+
+We might obtain an equation like:
+\begin{equation*}
+3 \ddot x + 8 \dot x + 6x = (t^2 + 1) e^{-t}
+\end{equation*}
+
+Let us suppose some function $u(t)$ exists such that $x_p(t) = u(t) e^{-t}$ is a particular solution to the above equation. Then we can compute $\dot x_p$ and $\ddot x_p$:
+\begin{align*}
+\dot x_p &= \dot u e^{-t} - u e^{-t} \\
+\ddot x_p &= \ddot u e^{-t} - 2 \dot u e^{-t} + u e^{-t}
+\end{align*}
+
+Then we can plug this into the ODE to get:
+\begin{align*}
+3 (\ddot u e^{-t} - 2 \dot u e^{-t} + u e^{-t}) + 8 (\dot u e^{-t} - u e^{-t}) + 6 (u e^{-t}) &= (t^2 + 1) e^{-t} \\
+3 \ddot u e^{-t} + 2 \dot u e^{-t} + u e^{-t} &= (t^2 + 1) e^{-t}
+\end{align*}
+
+Then we have:
+\begin{equation*}
+3\ddot u + 2 \dot u + u = t^2 + 1
+\end{equation*}
