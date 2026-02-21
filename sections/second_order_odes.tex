@@ -1015,6 +1015,53 @@ This solution grows without bound as $t$ increases, which is the classical notio
 }
 
 
+\begin{mdframed}
+\subsection{Steps to using complexification to solve for particular solutions}
+\begin{enumerate}
+    \item Complexify the equation by replacing the real input function with a complex exponential function. For example, if the input is $\cos(\omega t)$, we can replace it with $e^{i \omega t}$.
+    \item Apply the exponential response formula to find a particular solution to the complexified equation.
+    \item Extract the real part of the particular solution to get a particular solution to the original equation (if the original input was a cosine function) or extract the imaginary part to get a particular solution to the original equation (if the original input was a sine function).
+\end{enumerate}
+\end{mdframed}
+
+\subsection{Polynomial inputs}
+If we have a polynomial input, we can guess a particular solution that is also a polynomial of the same degree. For example, if we have:
+\begin{equation*}
+\ddot x + 4x = t^2
+\end{equation*}
+
+Then we can guess a particular solution of the form:
+\begin{equation*}
+x_p(t) = At^2 + Bt + C
+\end{equation*}
+
+Then we can compute $\dot x_p$ and $\ddot x_p$:
+\begin{align*}
+\dot x_p &= 2At + B \\
+\ddot x_p &= 2A
+\end{align*}
+
+Then we can plug this into the ODE to get:
+\begin{align*}
+2A + 4(At^2 + Bt + C) &= t^2 \\
+(4A) t^2 + (4B) t + (2A + 4C) &= t^2
+\end{align*}
+Thus, we have the system of equations:
+\begin{align*}
+4A &= 1 \\
+4B &= 0 \\
+2A + 4C &= 0
+\end{align*}
+which gives us $A = \frac{1}{4}$, $B = 0$, and $C = -\frac{1}{8}$. Thus, the particular solution is:
+\begin{equation*}
+\boxed{
+x_p(t) = \frac{1}{4} t^2 - \frac{1}{8}
+}
+\end{equation*}
+
+
+
+
 \subsection{Reduction of order}
 
 Second-order ODEs may also have the form:
@@ -1062,9 +1109,10 @@ Finally, the general solution is:
 x(t) = C_1 + C_2 e^{-t} + \frac{t^2}{2} - t
 }
 \end{equation*}
+}
 
 
-\subsection{Variation of parmeters}
+\subsection{Variation of parameters}
 
 We might obtain an equation like:
 \begin{equation*}
@@ -1087,3 +1135,62 @@ Then we have:
 \begin{equation*}
 3\ddot u + 2 \dot u + u = t^2 + 1
 \end{equation*}
+
+To solve this, we guess $u = At^2 + Bt + C$, and then we can compute $\dot u$ and $\ddot u$:
+\begin{align*}
+\dot u &= 2At + B \\
+\ddot u &= 2A
+\end{align*}
+
+Then we can plug this into the ODE to get:
+\begin{align*}
+3(2A) + 2(2At + B) + (At^2 + Bt + C) &= t^2 + 1 \\
+6A + 4At + 2B + At^2 + Bt + C &= t^2 + 1
+\end{align*}
+
+Grouping by powers of $t$ gives:
+\begin{align*}
+At^2 + (4A + B) t + (6A + 2B + C) &= t^2 + 1
+\end{align*}
+
+Thus we have the system of equations:
+\begin{align*}
+A &= 1 \\
+4A + B &= 0 \\
+6A + 2B + C &= 1
+\end{align*}
+
+We get that $A = 1$, $B = -4$, and $C = 3$.
+
+So we have $u(t) = t^2 - 4t + 3$, and thus the particular solution is:
+\begin{equation*}
+x_p(t) = u(t) e^{-t} = (t^2 - 4t + 3) e^{-t}
+\end{equation*}
+
+\begin{equation*}
+\boxed{
+x_p(t) = (t^2 - 4t + 3) e^{-t}
+}
+\end{equation*}
+
+\nt{
+    We often end up with a polynomial multiplied by an exponential. To evaluate an integral involving this expression more easily, you can apply the operator trick.
+    \begin{equation*}
+        \boxed{
+            \int P(t) e^{\alpha t} dt = e^{\alpha t} \left( \frac{P(t)}{\alpha} - \frac{P'(t)}{\alpha^2} + \frac{P''(t)}{\alpha^3} - \cdots \right)
+        }
+    \end{equation*}
+    This works because when we do integration by parts, we continue until we get a derivative equal to zero, which just returns a constant. We can also apply this operator trick to solve ODEs. For example, if we have:
+    \begin{equation*}
+    (D - \alpha I) x = P(t) e^{\alpha t}
+    \end{equation*}
+
+    Then we can apply the operator trick to get:
+    \begin{equation*}
+    x = \frac{P(t)}{\alpha} e^{\alpha t} - \frac{P'(t)}{\alpha^2} e^{\alpha t} + \frac{P''(t)}{\alpha^3} e^{\alpha t} - \cdots
+    \end{equation*}
+
+    Note that this is similar to how we got the generalized exponential response formula for the case of resonance, where we had to take derivatives of the characteristic polynomial until we got a non-zero value.
+}
+
+
