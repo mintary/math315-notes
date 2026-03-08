@@ -192,7 +192,33 @@ Consider different waves: a square wave, triangle wave, and a wave consisting of
 
 The square wave is discontinuous, the triangle wave is continuous but not differentiable, and the parabola wave is continuous and differentiable.
 
-The Fourier coefficients of the square wave decay as $\frac{1}{m}$, the Fourier coefficients of the triangle wave decay as $\frac{1}{m^2}$, and the Fourier coefficients of the parabola wave decay as $\frac{1}{m^3}$. This occurs because the Fourier coefficients are related to the smoothness of the function. The smoother the function, the faster the Fourier coefficients decay. In general, if a function is $k$ times differentiable, then its Fourier coefficients decay at least as fast as $\frac{1}{m^{k+1}}$.
+Integrating the formula for a coefficient by parts:
+\begin{align*}
+a_m &= \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \cos(mt) dt \\
+&= \frac{1}{\pi} \left[ f(t) \frac{\sin(mt)}{m} \right]_{-\pi}^{\pi} - \frac{1}{\pi} \int_{-\pi}^{\pi} f'(t) \frac{\sin(mt)}{m} dt
+\end{align*}
+
+If $f$ is continuous, then the first term is zero, and we have:
+\begin{align*}
+a_m &= -\frac{1}{m \pi} \int_{-\pi}^{\pi} f'(t) \sin(mt) dt \\
+&= -\frac{1}{m} b_m'
+\end{align*}
+
+Then if $f(t)$ is twice differentiable, another integration is possible.
+
+Notice that we are repeatedly integrating by parts, and each time we do so, we get an extra factor of $\frac{1}{m}$ in the denominator. Thus, if $f$ is $k$ times differentiable, then we have:
+\begin{equation*}
+a_m = \frac{(-1)^k}{m^k} b_m^{(k)}
+\end{equation*}
+
+Note that in the $b_m^{(k)}$ term, there is a "hidden" $1/m$ term, since $b_m$ is defined as an integral of $f(t) \sin(mt)$, and integrating by parts will introduce a factor of $1/m$ each time. Thus, we have:
+\begin{equation*}
+a_m = \frac{(-1)^k}{m^{k+1}} b_m^{(k+1)}
+\end{equation*}
+
+This means that the Fourier coefficients decay at a rate of $\frac{1}{m^{k+1}}$ if the function is $k$ times differentiable. In particular, if a function is infinitely differentiable, then its Fourier coefficients decay faster than any polynomial rate.
+
+For example, the Fourier coefficients of the square wave function decay at a rate of $\frac{1}{m}$, since the square wave is not continuous. The Fourier coefficients of the triangle wave function decay at a rate of $\frac{1}{m^2}$, since the triangle wave is continuous but not differentiable. The Fourier coefficients of the parabola wave function decay at a rate of $\frac{1}{m^3}$, since the parabola wave is continuous and differentiable.
 
 \nt{
     Piecewise continuous functions are functions that are continuous on each piece of their domain, but may have a finite number of jump discontinuities. For example, the square wave function is piecewise continuous, as it is continuous on the intervals $(-\pi, 0)$ and $(0, \pi)$, but has a jump discontinuity at $t = 0$.
@@ -203,6 +229,8 @@ The Fourier coefficients of the square wave decay as $\frac{1}{m}$, the Fourier 
     \end{equation*}
     A \textbf{nice function} is defined if we have $f(a) = \frac{1}{2} \left( f(a^{-}) + f(a^{+}) \right)$ for all $a$. In other words, the function is defined at the point of discontinuity as the average of the left and right limits. If a function is nice, then its Fourier series converges to the function at all points.
 }
+
+The Gibb's phenomenon is the overshoot that occurs near a jump discontinuity in the Fourier series approximation of a function. The overshoot does not go away as we include more terms in the Fourier series, and it approaches a fixed percentage of the jump discontinuity as the number of terms goes to infinity.
 
 \subsection{Manipulating Fourier series}
 
@@ -268,4 +296,321 @@ f(t) &= \frac{a_0}{2} + \sum_{m=1}^{\infty} \left( a_m \cos(mt) + b_m \sin(mt) \
     \end{align*}
 
     Then we have that $f'(t)$ is a sum of cosine functions, which is a periodic function with period $2\pi$.
+}
+
+\subsection{Parseval's theorem and Basel problem}
+
+We recall that the square wave function is given by:
+\begin{equation*}
+f(t) = \frac{4}{\pi} \left( \sin(t) + \frac{1}{3} \sin(3t) + \cdots \right)
+\end{equation*}
+
+Then we have that:
+\begin{align*}
+f(t) = \frac{4}{\pi} \sum_{n \text{ odd}} \frac{1}{n} \sin(nt)
+\end{align*}
+
+\thm{Parseval's theorem}{
+    If $f(t)$ is a periodic function with Fourier coefficients $a_m$ and $b_m$, then we have:
+    \begin{equation*}
+    \frac{1}{\pi} \int_{-\pi}^{\pi} |f(t)|^2 dt = \frac{a_0^2}{2} + \sum_{m=1}^{\infty} \left( a_m^2 + b_m^2 \right)
+    \end{equation*}
+}
+\pf{Proof.}{
+    We use the orthogonality of the sine and cosine functions to compute the integral. Anytime we have a $\cos(mt) \cos(nt)$ or $\sin(mt) \sin(nt)$ term, we get zero unless $m = n$. Cross-terms with $\cos (mt) \sin (nt)$ vanish. Any term with $a_0$ will vanish when multiplied by $\cos(mt)$ or $\sin(mt)$, since the average value of $\cos(mt)$ and $\sin(mt)$ is zero.
+    
+    Thus, we have:
+    \begin{align*}
+    \frac{1}{\pi} \int_{-\pi}^{\pi} |f(t)|^2 dt &= \frac{1}{\pi} \int_{-\pi}^{\pi} \left( \frac{a_0}{2} + \sum_{m=1}^{\infty} \left( a_m \cos(mt) + b_m \sin(mt) \right) \right)^2 dt \\
+    &= \frac{1}{\pi} \int_{-\pi}^{\pi} \left( \frac{a_0^2}{4} + \sum_{m=1}^{\infty} \left( a_m^2 \cos^2(mt) + b_m^2 \sin^2(mt) \right) + \text{cross-terms} \right) dt \\
+    &= \frac{a_0^2}{2} + \sum_{m=1}^{\infty} \left( a_m^2 + b_m^2 \right)
+    \end{align*}
+
+    }
+
+\ex{Basel problem}{
+    We can use Parseval's theorem to solve the Basel problem, which asks for the value of the series $\sum_{n=1}^{\infty} \frac{1}{n^2}$. First, let's consider the square wave function again:
+    \begin{equation*}
+f(t) = \frac{4}{\pi} \sum_{n \text{ odd}} \frac{1}{n} \sin(nt)
+\end{equation*}
+
+From Parseval's theorem, we have:
+\begin{align*}
+\frac{1}{\pi} \int_{-\pi}^{\pi} |f(t)|^2 dt &= \sum_{n \text{ odd}} \left( \frac{4}{\pi} \frac{1}{n} \right)^2 \\
+&= \frac{16}{\pi^2} \sum_{n \text{ odd}} \frac{1}{n^2}
+\end{align*}
+
+On the other hand, if we take $\int_{-\pi}^{\pi} |f(t)|^2 dt$, we can compute this integral directly. Since $f(t)$ is a square wave, we have:
+\begin{align*}
+\frac{1}{\pi} \int_{-\pi}^{\pi} |f(t)|^2 dt &= \frac{1}{\pi} \left( \int_{-\pi}^{0} 1^2 dt + \int_{0}^{\pi} 1^2 dt \right) \\
+&= \frac{1}{\pi} (0 - (-\pi) + \pi - 0) \\
+&= 2
+\end{align*}
+
+Thus, we have:
+\begin{align*}
+2 &= \frac{16}{\pi^2} \sum_{n \text{ odd}} \frac{1}{n^2} \\
+\sum_{n \text{ odd}} \frac{1}{n^2} &= \frac{\pi^2}{8}
+\end{align*}
+
+Now we can express the sum over odd integers in terms of the sum over all integers:
+\begin{align*}
+\sum_{n=1}^{\infty} \frac{1}{n^2} &= \sum_{n \text{ odd}} \frac{1}{n^2} + \sum_{n \text{ even}} \frac{1}{n^2} \\
+&= \sum_{n \text{ odd}} \frac{1}{n^2} + \frac{1}{4} \sum_{n=1}^{\infty} \frac{1}{n^2} \ \text{ since } \frac{1}{2^2} + \frac{1}{4^2} + \cdots = \frac{1}{4} \sum_{n=1}^{\infty} \frac{1}{n^2} \\
+&= \frac{\pi^2}{8} + \frac{1}{4} \sum_{n=1}^{\infty} \frac{1}{n^2}
+\end{align*}
+
+Solving for $\sum_{n=1}^{\infty} \frac{1}{n^2}$, we get:
+\begin{align*}
+\sum_{n=1}^{\infty} \frac{1}{n^2} &= \frac{\pi^2}{6}
+\end{align*}
+}
+
+\ex{Basel problem with the triangle wave}{
+    Suppose that we want to compute $\sum_{n=1}^{\infty} \frac{1}{n^4}$. From Parseval's theorem, we know that we could get the odd part $\sum_{n \text{ odd}} \frac{1}{n^4}$ if we had some function with Fourier coefficients that decay at a rate of $\frac{1}{n^2}$.
+
+    We noticed that integrating a Fourier series term by term will introduce a factor of $\frac{1}{n}$ in the denominator, so if we start with a function whose Fourier coefficients decay at a rate of $\frac{1}{n}$, then integrating it will give us a function whose Fourier coefficients decay at a rate of $\frac{1}{n^2}$. The square wave function has Fourier coefficients that decay at a rate of $\frac{1}{n}$, so we can integrate the square wave function to get a function whose Fourier coefficients decay at a rate of $\frac{1}{n^2}$. Integrating the square wave function, we get:
+\begin{align*}
+f(t) &= \int \frac{4}{\pi} \sum_{n \text{ odd}} \frac{1}{n} \sin(nt) dt \\
+&= \frac{4}{\pi} \sum_{n \text{ odd}} \frac{1}{n^2} (-\cos(nt)) + C
+\end{align*}
+
+And if we were to integrate the square wave geometrically in a piecewise way, we'd find that the resulting function is a triangle wave, defined as:
+\begin{equation*}
+f(x) = \begin{cases}
+-x & -\pi < x < 0 \\
+x & 0 < x < \pi
+\end{cases}
+\end{equation*}
+
+Then we have that the Fourier coefficients of the triangle wave function are given by:
+\begin{align*}
+a_m &= \frac{1}{\pi} \int_{-\pi}^{\pi} f(t) \cos(mt) dt \\
+&= \frac{1}{\pi} \int_{-\pi}^{\pi} |t| \cos(mt) dt \ \text{ even function } \\
+&= \frac{2}{\pi} \int_{0}^{\pi} t \cos(mt) dt \\
+&= \frac{2}{\pi} \left[ t \frac{\sin(mt)}{m} \right]_{0}^{\pi} - \frac{2}{\pi} \int_{0}^{\pi} \frac{\sin(mt)}{m} dt \\
+&= \frac{2}{\pi} \left[ \frac{\pi \sin(m \pi)}{m} - 0 \right] + \frac{2}{m^2 \pi} \left[ -\cos(mt) \right]_{0}^{\pi} \\
+&= \frac{2}{m^2 \pi} \left[ 1 - \cos(m \pi) \right] \\
+&= \begin{cases}
+\frac{4}{m^2 \pi} & m \text{ odd} \\
+0 & m \text{ even}
+\end{cases}
+\end{align*}
+
+Applying Parseval's theorem, we have:
+\begin{align*}
+\frac{1}{\pi} \int_{-\pi}^{\pi} |f(t)|^2 dt &= \frac{1}{2} a_0^2 + \sum_{n \text{ odd}} \left( \frac{4}{n^2 \pi} \right)^2 \\
+&= \frac{\pi^2}{2} + \frac{16}{\pi^2} \sum_{n \text{ odd}} \frac{1}{n^4}
+\end{align*}
+
+With the LHS being 
+\begin{align*}
+\frac{1}{\pi} \int_{-\pi}^{\pi} |f(t)|^2 dt &= \frac{1}{\pi} \left( \int_{-\pi}^{0} t^2 dt + \int_{0}^{\pi} t^2 dt \right) \\
+&= \frac{1}{\pi} \left( \frac{\pi^3}{3} + \frac{\pi^3}{3} \right) \\
+&= \frac{2 \pi^2}{3}
+\end{align*}
+
+Solving for $\sum_{n \text{ odd}} \frac{1}{n^4}$, we get:
+\begin{align*}
+\sum_{n \text{ odd}} \frac{1}{n^4} &= \frac{\pi^4}{96}
+\end{align*}
+
+Then we can express the sum over odd integers in terms of the sum over all integers:
+\begin{align*}
+\sum_{n=1}^{\infty} \frac{1}{n^4} &= \sum_{n \text{ odd}} \frac{1}{n^4} + \sum_{n \text{ even}} \frac{1}{n^4} \\
+&= \sum_{n \text{ odd}} \frac{1}{n^4} + \frac{1}{16} \sum_{n=1}^{\infty} \frac{1}{n^4} \ \text{ since } \frac{1}{2^4} + \frac{1}{4^4} + \cdots = \frac{1}{16} \sum_{n=1}^{\infty} \frac{1}{n^4} \\
+&= \frac{\pi^4}{96} + \frac{1}{16} \sum_{n=1}^{\infty} \frac{1}{n^4}
+\end{align*}
+Solving for $\sum_{n=1}^{\infty} \frac{1}{n^4}$, we get:
+\begin{align*}
+\sum_{n=1}^{\infty} \frac{1}{n^4} &= \frac{\pi^4}{90}
+\end{align*}
+}
+
+\subsection{Applying Fourier series to ODEs}
+\dfn{Superposition principle}{
+    If $f$ and $g$ are solutions to a linear homogeneous ordinary differential equation, then any linear combination of $f$ and $g$ is also a solution to the same differential equation.
+}
+
+This principle allows us to solve each term in the Fourier series separately, and then add up the solutions to get the solution to the original problem.
+
+\ex{Square wave forcing function}{
+    Consider some ODE of the form:
+    \begin{equation*}
+        \ddot x + \omega_m^2 x = \text{sq}(t)
+    \end{equation*}
+
+    We can express the square wave function as a Fourier series:
+\begin{equation*}
+\text{sq}(t) = \frac{4}{\pi} \left( \sin(t) + \frac{1}{3} \sin(3t) + \cdots \right)
+\end{equation*}
+
+Recall that to find $x_p(t)$, we could apply the ERF to each term (assuming no resonance). Then we obtain:
+\begin{align*}
+x_p(t) &= \left( \frac{4}{\pi} \right) \left[ \frac{1}{\omega_m^2 - 1} \sin(t) + \frac{1}{3} \frac{1}{\omega_m^2 - 9} \sin(3t) + \cdots \right]
+\end{align*}
+}
+
+What if we are close to resonance, that is, there is one term where $\omega_m^2 - n^2$ is close to zero? That term would dominate the solution.
+
+Let $r$ be some forcing frequency, which can also be complex. We say that $p(r) = \epsilon$ which is very small, so $r$ is close to a root of $p$. Then we have that the particular solution to the ODE is given by:
+\begin{equation*}
+x_p(t) = \frac{1}{\epsilon} \sin(rt)
+\end{equation*}
+
+
+\ex{Particular solution as a sum of cosines}{
+    We solve:
+    \begin{equation*}
+        \ddot x_n + 2 \dot x_n + 9 x_n = \cos(n t)
+    \end{equation*}
+
+    For $n = 0$, we have $x_0 = \frac{1}{9}$.
+
+    For $n > 0$, we can complexify:
+\begin{equation*}
+    \ddot z_n + 2 \dot z_n + 9 z_n = e^{i n t}
+\end{equation*}
+
+Inputting into the ERF:
+\begin{equation*}
+z_n(t) = \frac{1}{9 - n^2 + 2 i n} e^{i n t} \\
+\end{equation*}
+
+Let $R_n$ be the magnitude of the complex number given by $p(in)^{-1}$, and let $\phi_n$ be the argument.
+
+Then we have:
+\begin{equation*}
+R_n^{-1} = \sqrt{(9-n^2)^2 + 4n^2}
+\end{equation*}
+
+\begin{equation*}
+\phi_n = \tan^{-1} \left( \frac{2n}{9-n^2} \right)
+\end{equation*}
+
+Then we can write $z_n(t)$ as:
+\begin{equation*}
+z_n(t) = R_n e^{i (n t - \phi_n)}
+\end{equation*}
+
+Then we can take the real part to get $x_n(t)$:
+\begin{equation*}
+x_n(t) = R_n \cos(n t - \phi_n)
+\end{equation*}
+
+This enables us to easily take the real part when solving for the particular solution for a Fourier series consisting of a sum of cosines.
+\begin{equation*}
+x_p(t) = R_0 \cos(- \phi_0) + \sum_{n=1}^{\infty} R_n \cos(n t - \phi_n)
+\end{equation*}
+
+}
+
+\subsection{Complex replacement}
+Without loss of generality and over the period $[-L, L]$, we can also write a Fourier series in terms of exponentials.
+
+Recall that we have a Fourier series over $[-L, L]$ written as:
+\begin{equation*}
+f(t) = \frac{a_0}{2} + \sum_{m=1}^{\infty} \left( a_m \cos\left( \frac{m \pi t}{L} \right) + b_m \sin\left( \frac{m \pi t}{L} \right) \right)
+\end{equation*}
+
+Using this as a forcing function:
+\begin{equation*}
+p(D) x = f(t)
+\end{equation*}
+
+Using the complex replacement, we can write this as:
+\begin{equation*}
+f(t) = \frac{a_0}{2} + \sum_{n=1}^{\infty} c_n e^{i n \pi t / L}
+\end{equation*}
+
+Then we can write $z_p(t)$ as the sum of two particular solutions:
+\begin{equation*}
+z_p(t) = z_0(t) + \sum_{n=1}^{\infty} z_n(t)
+\end{equation*}
+
+First, we can solve for $z_0(t)$:
+\begin{align*}
+p(D) z_0(t) &= \frac{a_0}{2} \\
+z_0(t) &= \frac{a_0}{2 p(0)}
+\end{align*}
+
+If $p(0) = 0$, this implies that the coefficient before the $x$ term in $p(D)$ is zero. Apply reduction of order.
+
+Next, we can solve for $z_n(t)$. But we also need to check for resonance.
+
+Resonance occurs when $p(\frac{i n \pi}{L}) = 0$. This occurs when $\frac{i n \pi}{L}$ is a root of $p$. We call this $n_R$, or the resonant frequency.
+
+In general, we differentiate multiple times:
+\begin{equation*}
+p(\frac{i \pi n}{L}) = p'(\frac{i \pi n}{L}) = \cdots = p^{(k-1)}(\frac{i \pi n}{L}) = 0
+\end{equation*}
+
+Until we find some $k$ such that $p^{(k)}(\frac{i \pi n}{L}) \neq 0$. 
+
+For:
+\begin{equation*}
+\boxed{
+z_{p, n \not = n_R} = \frac{c_n}{p(\frac{i n \pi}{L})} e^{\frac{i n \pi}{L} t}
+}
+\end{equation*}
+
+
+For the resonant term, we have:
+\begin{equation*}
+\boxed{
+z_{p, n = n_R} = \frac{c_n}{p^{(k)}(\frac{i n \pi}{L})} t^k e^{\frac{i n_R \pi}{L}t}
+}
+\end{equation*}
+
+
+\ex{}{
+    Consider the ODE:
+    \begin{equation*}
+    \ddot x + 9x = t_r(t) 
+    \end{equation*}
+    where $t_r(t)$ is the triangle wave function defined as:
+\begin{equation*}
+t_r(t) = \begin{cases}
+-t & -\pi < t < 0 \\
+t & 0 < t < \pi
+\end{cases}
+\end{equation*}
+
+Representing as a Fourier series, we have:
+\begin{equation*}
+t_r(t) = \frac{\pi}{2} - \frac{8}{\pi} \left( \frac{1}{1^2} \cos(t) + \frac{1}{3^2} \cos(3t) + \cdots \right)
+\end{equation*}
+
+This has characteristic polynomial:
+\begin{equation*}
+p(r) = r^2 + 9
+\end{equation*}
+
+We find that the roots of the homogeneous equation are $\pm 3i$.
+
+Now, we complexify to obtain:
+\begin{equation*}
+\ddot z + 9z = \frac{\pi}{2} - \frac{8}{\pi} \sum_{n \text{ odd}} \frac{1}{n^2} e^{i n t}
+\end{equation*}
+
+Resonance occurs at the $n = 3$ term. Check $p(3i) = 0$, then $p'(3i) = 6i \not = 0$. 
+Hence:
+
+\begin{align*}
+z_{p, m}(t) &= \frac{1}{2 \cdot 9} - \frac{4}{\pi^2} \left( \frac{e^{it}}{p(i)} + \frac{1}{9} \cdot \frac{1}{p'(3i)} te^{3it} + \frac{1}{25} \cdot \frac{1}{p(5i)} e^{5it} + \cdots \right) \\
+&= \frac{1}{18} - \frac{4}{\pi^2} \left( \frac{e^{it}}{8} + \frac{1}{54} te^{3it} - \frac{1}{400} e^{5it} + \cdots \right) 
+\end{align*}
+
+All terms will have real part $\cos$ except the resonant one:
+\begin{align*}
+\text{Re} \left( \frac{1}{54i} te^{3it} \right) &= \text{Re} \left( \frac{-i}{54} e^{3it} \right) \\
+&= \frac{1}{54} \sin(3t)
+\end{align*}
+
+Then $x_p(t)$:
+\begin{equation*}
+\boxed{
+x_p(t) = \frac{1}{18} - \frac{4}{\pi^2} \left( \frac{1}{8} \cos(t) + \frac{1}{54} t \sin(3t) - \frac{1}{400} \cos(5t) + \cdots \right)
+}
+\end{equation*}
 }
