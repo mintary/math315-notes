@@ -214,3 +214,292 @@ We can do this because the delta function is zero everywhere except at $t' = t$,
 &= f(t)
 \end{align*}
 
+\section{Unit response function}
+\subsection{First-order linear systems}
+
+Let there be a system described by:
+\[
+\dot{x} + kx = r \cdot u(t)
+\]
+
+That is, before $t = 0$, the system is at rest, and at $t = 0$, we "turn on" the system with a constant input of $r$. We want to find the response of the system to this input.
+
+This can easily be solved using the integrating factor method with $\mu(t) = e^{kt}$, which gives us:
+\begin{align*}
+e^{kt} \dot{x} + ke^{kt} x &= re^{kt} u(t) \\
+\frac{d}{dt} (e^{kt} x) &= re^{kt} u(t) \\
+e^{kt} x &= r \int_{0}^{t} e^{k\overline{t}} d\overline{t} \\
+x &= re^{-kt} \int_{0}^{t} e^{k\overline{t}} d\overline{t} \\
+&= re^{-kt} \cdot \frac{e^{kt} - 1}{k} \\
+&= \frac{r}{k} (1 - e^{-kt}) \quad \text{for } t > 0
+\end{align*}
+
+
+\dfn{Unit impulse response function}
+{
+    The \textbf{unit impulse response function} of a system is the response of the system to a unit impulse input ($\delta(t)$).
+}
+
+ For a first-order linear system described by the equation $\dot{x} + kx = r \cdot u(t)$, the unit response function is given by:
+\begin{equation*}
+\boxed{
+v(t) = \frac{r}{k} (1 - e^{-kt}) u(t)
+}
+\end{equation*}
+
+We now plug $v(t)$ into the original equation (letting $r = 1$):
+\[
+\dot{v} + kv = u(t) \quad \text{w/} \quad v(0^-) = 0
+\]
+
+We can now solve for $\dot{v}$:
+\begin{align*}
+\dot{v} &= u(t) - kv \\
+&= u(t) - k \cdot \frac{1}{k} (1 - e^{-kt}) u(t) \\
+&= u(t) - (1 - e^{-kt}) u(t) \\
+&= e^{-kt} u(t)
+\end{align*}
+
+Note that at $t = 0^+$, we have:
+\begin{align*}
+\dot{v}(0^+) &= e^{-k \cdot 0} u(0) \\
+&= 1 \cdot 1 \\
+&= 1
+\end{align*}
+
+And we know that $u(0^+) = 1$, so basically we have that:
+\begin{equation*}
+\boxed{
+\dot{v}(0^+) = u(0^+)}
+\end{equation*}
+
+\ex{Basic unit impulse response function}{
+Consider the system described by the following equation:
+\[
+\dot{x} + kx = \delta (t)
+\]
+Find the response of the system to this input.
+}
+\sol{
+Solving the homogeneous equation $\dot{x} + kx = 0$ gives us that $x_h(t) = Ce^{-kt}$. Now we can use the method of variation of parameters to find a particular solution. Let $x_p(t) = C(t)e^{-kt}$, then we have:
+\begin{align*}
+\dot{x}_p + kx_p &= \dot{C}e^{-kt} - kCe^{-kt} + kCe^{-kt} \\
+&= \dot{C}e^{-kt} \\
+&= \delta(t)
+\end{align*}
+Now we can solve for $\dot{C}$:
+\begin{align*}
+\dot{C} &= e^{kt} \delta(t) \\
+&= e^{k \cdot 0} \delta(t) \\
+&= 1 \cdot \delta(t) \\
+&= \delta(t)
+\end{align*}
+Now we can integrate both sides to find $C(t)$:
+\begin{align*}
+C(t) &= \int_{-\infty}^{t} \delta(\overline{t}) d\overline{t} \\
+&= u(t)
+\end{align*}
+Finally, we can write the particular solution as follows:
+\begin{align*}
+x_p(t) &= C(t)e^{-kt} \\
+&= u(t)e^{-kt}
+\end{align*}
+Thus, the general solution to the nonhomogeneous equation is given by:
+\begin{align*}
+x(t) &= x_h(t) + x_p(t) \\
+&= Ce^{-kt} + u(t)e^{-kt}
+\end{align*}
+Now we can apply the initial condition $x(0^-) = 0$ to solve for $C$:
+\begin{align*}
+x(0^-) &= Ce^{-k \cdot 0} + u(0^-)e^{-k \cdot 0} \\
+&= C \cdot 1 + 0 \cdot 1 \\
+&= C
+\end{align*}
+Thus, we have that $C = 0$, and the response of the system to the input $\delta(t)$ is given by:
+\begin{equation*}
+\boxed{
+x(t) = u(t)e^{-kt}}
+\end{equation*}
+}
+
+We can further characterize the unit impulse function. For example, since the function is only "on" from $t >0$, we have that $w(0^-) = 0$ and $w(0^+) = 1$.
+
+Then, because $\delta(0^+) = 0$, we can also find that:
+\begin{align*}
+\dot{w}(0^+) &= \frac{d}{dt} w(t)  \bigg|_{t=0^+} \\
+&= \frac{d}{dt} (u(t)e^{-kt}) \bigg|_{t=0^+} \\
+&= -ke^{-kt}u(t) + e^{-kt} \delta(t) \bigg|_{t=0^+} \\
+&= -k \cdot 1 \cdot 1 + 1 \cdot 0 \\
+&= -k
+\end{align*}
+
+\subsection{Second-order linear systems}
+Consider the second-order linear system described by:
+\[
+m \ddot{x} + kx = \delta (t)
+\]
+
+That is, there is no damping in the system, and an increase in momentum occurs at $t = 0$ with no change in position.
+
+We will use the \textbf{shrinking interval method} to solve this problem. We will first solve the homogeneous equation $m \ddot{x} + kx = 0$ to find the general solution, and then we will apply the initial conditions to find the particular solution.
+
+Solving the homogeneous equation:
+\begin{align*}
+m r^2 + k &= 0 \\
+r^2 &= -\frac{k}{m} \\
+r &= \pm i \sqrt{\frac{k}{m}} \quad \text{(let } \omega_m = \sqrt{\frac{k}{m}} \text{)} \\
+r &= \pm i \omega_m
+\end{align*}
+
+Then writing $x_h(t)$:
+\begin{align*}
+x_h(t) = c_1 \cos (\omega_m t) + c_2 \sin (\omega_m t)
+\end{align*}
+
+To find the initial conditions, consider the behaviour of the system as $t$ approaches zero from the left and the right.
+
+As $t$ approaches zero from the left, we have that $x(0^-) = 0$ and $\dot{x}(0^-) = 0$ since the system is at rest before $t = 0$.
+
+We can integrate the equation $m \ddot{x} + kx = \delta (t)$ from $t = -\epsilon$ to $t = \epsilon$ for some small $\epsilon > 0$:
+\begin{align*}
+\int_{-\epsilon}^{\epsilon} m \ddot{x} + kx dt &= \int_{-\epsilon}^{\epsilon} \delta (t) dt \\
+m \dot{x}(\epsilon) - m \dot{x}(-\epsilon) + k \int_{-\epsilon}^{\epsilon} x dt &= 1
+\end{align*}
+
+Now, as $\epsilon$ approaches zero, we have that $\dot{x}(-\epsilon) \to 0$ and $\int_{-\epsilon}^{\epsilon} x dt \to 0$, so we can simplify the equation to get:
+\begin{align*}
+m \dot{x}(0^+) &= 1 \\
+\dot{x}(0^+) &= \frac{1}{m}
+\end{align*}
+
+Now we can apply the initial conditions to the general solution to find the particular solution:
+\begin{align*}
+x(0^+) &= c_1 \cos (0) + c_2 \sin (0) \\
+&= c_1 \\
+\end{align*}
+
+\begin{align*}
+\dot{x}(0^+) &= -c_1 \omega_m \sin (0) + c_2 \omega_m \cos (0) \\
+&= c_2 \omega_m \\
+&= \frac{1}{m} \\
+c_2 &= \frac{1}{m \omega_m}
+\end{align*}
+
+Thus, the response of the system to the input $\delta(t)$ is given by:
+\begin{equation*}
+\boxed{
+x(t) = \frac{1}{m \omega_m} \sin (\omega_m t) u(t)}
+\end{equation*}
+
+\subsection{Generalization to $n$-th order linear systems}
+
+Consider the $n$-th order linear system described by:
+\[
+a_n x^{(n)} + a_{n-1} x^{(n-1)} + \ldots + a_1 \dot{x} + a_0 x = u (t)
+\]
+
+We know that for $t < 0$, we have that $x(0^-) = 0$, $\dot{x}(0^-) = 0$, $\ldots$, $x^{(n-1)}(0^-) = 0$ since the system is at rest before $t = 0$.
+
+Applying the shrinking interval method, we can integrate the equation from $t = -\epsilon$ to $t = \epsilon$ for some small $\epsilon > 0$:
+\begin{align*}
+\int_{-\epsilon}^{\epsilon} a_n x^{(n)} + a_{n-1} x^{(n-1)} + \ldots + a_1 \dot{x} + a_0 x dt &= \int_{-\epsilon}^{\epsilon} u (t) dt \\
+a_n x^{(n-1)}(\epsilon) - a_n x^{(n-1)}(-\epsilon) + a_{n-1} x^{(n-2)}(\epsilon) - a_{n-1} x^{(n-2)}(-\epsilon) + \ldots + a_1 x(\epsilon) - a_1 x(-\epsilon) + a_0 \int_{-\epsilon}^{\epsilon} x dt &= 1
+\end{align*}
+
+Then all terms with $x^{(n-1)}(-\epsilon)$, $x^{(n-2)}(-\epsilon)$, $\ldots$, $x(-\epsilon)$, and $\int_{-\epsilon}^{\epsilon} x dt$ will approach zero as $\epsilon$ approaches zero, so we can simplify the equation to get:
+\begin{align*}
+a_n x^{(n-1)}(0^+) + a_{n-1} x^{(n-2)}(0^+) + \ldots + a_1 x(0^+) &= 1 \\
+a_n x^{(n-1)}(0^+) &= 1 \\
+x^{(n-1)}(0^+) &= \frac{1}{a_n}
+\end{align*}
+
+So we have the following initial conditions:
+\begin{itemize}
+    \item $x(0^+) = 0$
+    \item $\dot{x}(0^+) = 0$
+    \item $\ldots$
+    \item $x^{(n-2)}(0^+) = 0$
+    \item $x^{(n-1)}(0^+) = \frac{1}{a_n}$
+\end{itemize}
+
+\subsection{Unit step response function}
+
+\dfn{Unit step response function}
+{
+    The \textbf{unit step response function} of a system is the response of the system to a unit step input ($u(t)$).
+}
+
+\ex{Finding the unit step response function}{
+Find the unit step response function of the system described by the following equation:
+\[
+m\ddot{x} + kx = u(t)
+\]
+}
+\sol{
+We know that the homogeneous solution is:
+\begin{align*}
+x_h(t) = c_1 \cos (\omega_m t) + c_2 \sin (\omega_m t)
+\end{align*}
+
+To find the particular solution where $t>0$ implies $u(t) = 1$, we know that $x(0^+) = 0$, but we need the behaviour at $x(0^+)$ to find the particular solution. We can integrate the equation $m\ddot{x} + kx = u(t)$ from $t = -\epsilon$ to $t = \epsilon$ for some small $\epsilon > 0$:
+\begin{align*}
+\int_{-\epsilon}^{\epsilon} m\ddot{x} + kx dt &= \int_{-\epsilon}^{\epsilon} u(t) dt \\
+m \dot{x}(\epsilon) - m \dot{x}(-\epsilon) + k \int_{-\epsilon}^{\epsilon} x dt &= 0
+\end{align*}
+Now, as $\epsilon$ approaches zero, we have that $\dot{x}(-\epsilon) \to 0$ and $\int_{-\epsilon}^{\epsilon} x dt \to 0$, so we can simplify the equation to get:
+\begin{align*}
+m \dot{x}(0^+) &= 0 \\
+\dot{x}(0^+) &= 0
+\end{align*}
+Then computing coefficients, we find that:
+\begin{align*}
+c_1 &= \frac{-1}{k} \\
+c_2 &= 0
+\end{align*}
+
+Then we get:
+\begin{align*}
+x(t) = \frac{1}{k}\cos (\omega_m t) - \frac{1}{k} \quad \text{for } t > 0
+\end{align*}
+
+This function is only non-zero when $t > 0$, so we can multiply the function by $u(t)$ to get the final solution.
+
+Hence the \textbf{unit step response function} of the system is given by:
+\begin{equation*}
+\boxed{
+x(t) = \frac{1}{k} (1 - \cos (\omega_m t)) u(t)
+}
+\end{equation*}
+
+}
+
+Recall that we can write the system as:
+\[
+p(D) x = q(t)
+\]
+where $p(D) = a_n D^n + a_{n-1} D^{n-1} + \ldots + a_1 D + a_0$ and $q(t)$ is some input function.
+
+Then, differentiating both sides once:
+\begin{align*}
+p(D) \dot{x} &= \dot{q}(t)
+\end{align*}
+
+Now for the unit step function system:
+\begin{align*}
+p(D) x &= u(t)
+\end{align*}
+
+We can differentiate both sides once to get:
+\begin{align*}
+p(D) \dot{x} &= \delta(t)
+\end{align*}
+
+Thus, we can see that the unit step response function is the same as the unit impulse response function, except that the initial conditions are shifted by one order. For example, for a first-order linear system, the unit step response function will have an initial condition of $\dot{x}(0^+) = 0$ instead of $\dot{x}(0^+) = \frac{1}{a_1}$.
+
+Also, given the unit step response function $v(t)$, we can find the unit impulse response function $w(t)$ by differentiating $v(t)$:
+\begin{align*}
+\boxed{
+\dot{v}(t) = w(t)
+}
+\end{align*}
+
