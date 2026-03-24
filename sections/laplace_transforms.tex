@@ -503,3 +503,576 @@ Also, given the unit step response function $v(t)$, we can find the unit impulse
 }
 \end{align*}
 
+\section{Convolution}
+Let there be some system:
+\[
+p(D) x = q(t)
+\]
+
+where $q(t)$ is some input function, which is made of a sum of impulses. We can write $q(t)$ as a sum of impulses as follows:
+\begin{align*}
+q(t) &= \int_{-\infty}^{\infty} q(\tau) \delta(t - \tau) d\tau
+\end{align*}
+
+Recall the unit impulse response function $w(t)$. We can also write using linearity and $\delta$ function properties that:
+\begin{align*}
+p(D) a w(t - \tau) &= a \delta(t - \tau)
+\end{align*}
+
+Using the linearity of the system (and the fact that we can shift the delta function), we can write the response of the system to the input $q(t)$ as follows:
+\begin{align*}
+x(t) &= \sum_{-\infty}^{\infty} q(\tau) w(t - \tau) \\
+&= \int_{-\infty}^{\infty} q(\tau) w(t - \tau) d\tau
+\end{align*}
+
+This is allowed as $q(\tau)$ is just a constant with respect to $t$.
+
+We see now that we can obtain any response of the system by mixing the input function $q(t)$ with the unit impulse response function $w(t)$. 
+
+
+\dfn{Convolution}
+{
+    The \textbf{convolution} of two functions $f(t)$ and $g(t)$ is defined as the integral of the product of the two functions, where one function is reversed and shifted. Mathematically, it is given by:
+    \[
+    (f * g)(t) = \int_{-\infty}^{\infty} f(\tau) g(t - \tau) d\tau
+    \]
+}
+
+Since integrals are linear operators, we also have:
+\begin{align*}
+\frac{d}{dt} (u \* v) = (p(D) u) \* v = u \* (p(D) v)
+\end{align*}
+
+We also recall that we found it possible to "extract" the value of a function at a point by multiplying the function by a delta function and integrating, i.e.
+\begin{align*}
+\int_{-\infty}^{\infty} f(t) \delta(t - a) dt = f(a)
+\end{align*}
+
+We now saw that this was the convolution of $f(t)$ with $\delta(t)$.
+
+Now, we can write the response of the system to the input $q(t)$ as the convolution of $q(t)$ with the unit impulse response function $w(t)$:
+\begin{align*}
+x(t) &= \int_{-\infty}^{\infty} q(\tau) w(t - \tau) d\tau \\
+&= (q * w)(t)
+\end{align*}
+
+\ex{Using the convolution to solve a system}{
+Consider the system described by the following equation:
+\[
+\dot{x} + 5x = \sin(\omega t) u(t)
+\]
+
+Find the general solution to this system.
+}
+
+\sol{
+We recall that:
+\[
+w(t) = u(t)e^{-kt} 
+\]
+
+In this case, we have that $k = 5$, so we can write the unit impulse response function as follows:
+\begin{equation*}
+w(t) = u(t)e^{-5t}
+\end{equation*}
+
+So find $x(t)$, we simply convolve the input function $\sin(\omega t) u(t)$ with the unit impulse response function $w(t)$. We use complex replacement to find the convolution:
+\begin{align*}
+x(t) &= \int_{-\infty}^{\infty} \sin(\omega \tau) u(\tau) w(t - \tau) d\tau \\
+&= \int_{0}^{t} \sin(\omega \tau) e^{-5(t - \tau)} d\tau \\
+&= e^{-5t} \int_{0}^{t} \sin(\omega \tau) e^{5\tau} d\tau \\
+&= e^{-5t} \cdot \frac{e^{5t}(5\sin(\omega t) - \omega \cos(\omega t)) + \omega}{25 + \omega^2} \\
+&= \frac{5\sin(\omega t) - \omega \cos(\omega t)}{25 + \omega^2} + \frac{\omega e^{-5t}}{25 + \omega^2}
+\end{align*}
+
+where $\omega \neq 5$. Notably, we have extracted both the particular solution (which is the second term) and the homogeneous solution (which is the first term) from the convolution. However, this formula does not work when resonance occurs, i.e. when $\omega = 5$.
+
+}
+
+\subsection{Properties of convolution:}
+\begin{itemize}
+\item Convolution is commutative: $f * g = g * f$
+\item Convolution is associative: $f * (g * h) = (f * g) * h$
+\item Convolution is distributive over addition: $f * (g + h) = f * g + f * h$
+\item Convolution with a delta function: $f * \delta = f$
+\item Convolution with a shifted delta function: $f * \delta(t - a) = f(t - a)$
+\item Convolution with a unit step function: $f * u = \int_{-\infty}^{t} f(\tau) d\tau$
+\item Convolution with an exponential function: $f * e^{at} = \int_{-\infty}^{t} f(\tau) e^{a(t - \tau)} d\tau$
+\end{itemize}
+
+\section{Laplace transforms}
+The Laplace transform is a generalization of the above. Looking at the convolution product to get $x(t)$:
+\begin{equation*}
+x(t) = \int_{-\infty}^{\infty} q(\tau) w(t - \tau) d\tau
+\end{equation*}
+
+We expand out $w(t - \tau)$ (for a first-order case, and assuming $t > 0$):
+\begin{align*}
+x(t) &= \int_{-\infty}^{\infty} q(\tau) u(t - \tau) e^{-k(t - \tau)} d\tau 
+\end{align*}
+
+We can take out the $e^{-kt}$ term since it is a constant with respect to $\tau$:
+\begin{align*}
+x(t) &= e^{-kt} \int_{-\infty}^{\infty} q(\tau) u(t - \tau) e^{k\tau} d\tau
+\end{align*}
+
+Note that $u(t - \tau)$ is zero for $\tau > t$ and $q(\tau) = 0$ for $\tau < 0$, so we can change the limits of integration to get:
+\begin{align*}
+x(t) &= e^{-kt} \int_{0}^{t} q(\tau) e^{k\tau} d\tau
+\end{align*}
+
+Now we make the substitution $s = -k$ to get:
+\begin{align*}
+x(t) &= e^{st} \int_{0}^{t} q(\tau) e^{-s\tau} d\tau
+\end{align*}
+
+Now we can define the Laplace transform of $q(t)$ as follows:
+\begin{equation*}
+\boxed{
+\mathcal{L}\{q(t)\} = \int_{0}^{\infty} q(\tau) e^{-s\tau} d\tau
+}
+\end{equation*}
+
+Then we can write $x(t)$ in terms of the Laplace transform of $q(t)$ as follows:
+\begin{align*}
+x(t) &= e^{st} \int_{0}^{t} q(\tau)
+e^{-s\tau} d\tau \\
+&= e^{st} \mathcal{L}\{q(t)\}
+\end{align*}
+
+\dfn{Laplace transform}
+{
+    The \textbf{Laplace transform} of a function $f(t)$ is defined as the integral of the product of the function and an exponential decay factor, given by:
+    \[
+    \mathcal{L}\{f(t)\} = \int_{0}^{\infty} f(t) e^{-st} dt
+    \]
+    where $s$ is a complex number. 
+}
+
+Recall that we found that $x(t) = (q * w)(t)$, where $w(t)$ is the unit impulse response function. When we take the Laplace transform of both sides, we get:
+\begin{align*}
+\mathcal{L}\{x(t)\} &= \mathcal{L}\{(q * w)(t)\} \\
+&= \mathcal{L}\{q(t)\} \cdot \mathcal{L}\{w(t)\}
+\end{align*}
+
+\ex{Laplace transform of 1}{
+Find the Laplace transform of the function $f(t) = 1$.
+}
+\sol{
+We can compute the Laplace transform of $f(t) = 1$ as follows:
+\begin{align*}
+\mathcal{L}\{1\} &= \int_{0}^{\infty} 1 \cdot e^{-st} dt \\
+&= \int_{0}^{\infty} e^{-st} dt \\
+&= \left[ \frac{e^{-st}}{-s} \right]_{0}^{\infty} \\
+&= \frac{1}{s}
+\end{align*}
+Thus, we have that:
+\begin{equation*}
+\boxed{
+\mathcal{L}\{1\} = \frac{1}{s}}
+\end{equation*}
+}
+
+\nt{
+    We know that $s \in \bbC$. Taking the modulus of $e^{st}$, we have:
+    \begin{align*}
+    |e^{st}| &= | e^{(a+bi)t} | \\
+    &= | e^{at} \cdot e^{ibt} | \\
+    &= | e^{at} | \cdot | e^{ibt} | \\
+    &= e^{at} \cdot 1 \\
+    &= e^{at}
+    \end{align*}
+    So the Laplace transform of $f(t) = 1$ converges if and only if $a < 0$, i.e. $\Re(s) < 0$.
+}
+
+\ex{Laplace transform of $t^n$}{
+Find the Laplace transform of the function $f(t) = t^n$, where $n$ is a positive integer.
+}
+\sol{
+We can compute the Laplace transform of $f(t) = t^n$ as follows:
+\begin{align*}
+\mathcal{L}\{t^n\} &= \int_{0}^{\infty} t^n e^{-st} dt \\
+&= \left[ -\frac{t^n e^{-st}}{s} \right]_{0}^{\infty} + \frac{n}{s} \int_{0}^{\infty} t^{n-1} e^{-st} dt \\
+&= 0 + \frac{n}{s} \mathcal{L}\{t^{n-1}\}
+\end{align*}
+Now we can apply this process iteratively to find the Laplace transform of $t^n$:
+\begin{align*}
+\mathcal{L}\{t^n\} &= \frac{n}{s} \mathcal{L}\{t^{n-1}\} \\
+\mathcal{L}\{t^n\} &= \frac{n}{s} \mathcal{L}\{t^{n-1}\} \\
+&= \frac{n}{s} \cdot \frac{n-1}{s} \mathcal{L}\{t^{n-2}\} \\
+&= \frac{n}{s} \cdot \frac{n-1}{s} \cdot \frac{n-2}{s} \mathcal{L}\{t^{n-3}\} \\
+&\vdots \\
+&= \frac{n(n-1)(n-2)\cdots 1}{s^n} \mathcal{L}\{t^0\} \\
+&= \frac{n!}{s^n} \mathcal{L}\{1\}
+\end{align*}
+It remains to find $\mathcal{L}\{1\}$:
+\begin{align*}
+\mathcal{L}\{1\} &= \int_{0}^{\infty} e^{-st} \, dt 
+= \left[ -\frac{e^{-st}}{s} \right]_{0}^{\infty} 
+= \frac{1}{s}
+\end{align*}
+Therefore:
+\begin{align*}
+\mathcal{L}\{t^n\} &= \frac{n!}{s^n} \cdot \frac{1}{s} = \frac{n!}{s^{n+1}}
+\end{align*}
+}
+
+Laplace transforms also satisfy linearity, i.e. for any constants $a$ and $b$, we have:
+\begin{align*}
+\mathcal{L}\{af(t) + bg(t)\} &= a \mathcal{L}\{f(t)\} + b \mathcal{L}\{g(t)\}
+\end{align*}
+
+They also satisfy shifting properties, i.e. for any constant $a$, we have:
+\begin{align*}
+\mathcal{L}\{e^{at} f(t)\} &= F(s - a) \\
+\mathcal{L}\{f(t - a) u(t - a)\} &= e^{-as} F(s)
+\end{align*}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.8}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Function} & $f(t)$ & $\mathcal{L}\{f(t)\} = F(s)$ \\
+\hline
+Unit impulse & $\delta(t)$ & $1$ \\
+\hline
+Unit step & $u(t)$ & $\dfrac{1}{s}$ \\
+\hline
+Ramp & $t$ & $\dfrac{1}{s^2}$ \\
+\hline
+Power & $t^n$ & $\dfrac{n!}{s^{n+1}}$ \\
+\hline
+Exponential & $e^{at}$ & $\dfrac{1}{s-a}$ \\
+\hline
+Sine & $\sin(\omega t)$ & $\dfrac{\omega}{s^2 + \omega^2}$ \\
+\hline
+Cosine & $\cos(\omega t)$ & $\dfrac{s}{s^2 + \omega^2}$ \\
+\hline
+Damped sine & $e^{at}\sin(\omega t)$ & $\dfrac{\omega}{(s-a)^2 + \omega^2}$ \\
+\hline
+Damped cosine & $e^{at}\cos(\omega t)$ & $\dfrac{s-a}{(s-a)^2 + \omega^2}$ \\
+\hline
+Hyperbolic sine & $\sinh(at)$ & $\dfrac{a}{s^2 - a^2}$ \\
+\hline
+Hyperbolic cosine & $\cosh(at)$ & $\dfrac{s}{s^2 - a^2}$ \\
+\hline
+\end{tabular}
+\caption{Common Laplace Transform Pairs}
+\label{tab:laplace}
+\end{table}
+
+\begin{table}[h]
+\centering
+\renewcommand{\arraystretch}{1.8}
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Property} & \textbf{Transform} \\
+\hline
+Linearity & $\mathcal{L}\{af(t) + bg(t)\} = aF(s) + bG(s)$ \\
+\hline
+First derivative & $\mathcal{L}\{f'(t)\} = sF(s) - f(0)$ \\
+\hline
+Second derivative & $\mathcal{L}\{f''(t)\} = s^2F(s) - sf(0) - f'(0)$ \\
+\hline
+$n$-th derivative & $\mathcal{L}\{f^{(n)}(t)\} = s^n F(s) - \displaystyle\sum_{k=1}^{n} s^{n-k} f^{(k-1)}(0)$ \\
+\hline
+Integration & $\mathcal{L}\left\{\int_0^t f(\tau)\,d\tau\right\} = \dfrac{F(s)}{s}$ \\
+\hline
+Frequency shift & $\mathcal{L}\{e^{at}f(t)\} = F(s-a)$ \\
+\hline
+Time shift & $\mathcal{L}\{f(t-a)u(t-a)\} = e^{-as}F(s)$ \\
+\hline
+Scaling & $\mathcal{L}\{f(at)\} = \dfrac{1}{a}F\!\left(\dfrac{s}{a}\right)$ \\
+\hline
+Convolution & $\mathcal{L}\{f(t) * g(t)\} = F(s)\cdot G(s)$ \\
+\hline
+Multiplication by $t$ & $\mathcal{L}\{t^n f(t)\} = (-1)^n \dfrac{d^n F(s)}{ds^n}$ \\
+\hline
+\end{tabular}
+\caption{Laplace Transform Properties}
+\label{tab:laplace-props}
+\end{table}
+
+\section{Using Laplace transforms to solve linear systems}
+Taking the Laplace transform of a derivative:
+\begin{align*}
+\mathcal{L}\{\dot{x}(t)\} &= \int_{0}^{\infty} \dot{x}(t) e^{-st} dt \\
+&= \left[ x(t) e^{-st} \right]_{0}^{\infty} + s \int_{0}^{\infty} x(t) e^{-st} dt \\
+&= 0 - x(0) + sX(s) \\
+&= sX(s) - x(0)
+\end{align*}
+
+Taking the Laplace transform of a second derivative:
+\begin{align*}
+\mathcal{L}\{\ddot{x}(t)\} &= \int_{0}^{\infty} \ddot{x}(t) e^{-st} dt \\
+&= \left[ \dot{x}(t) e^{-st} \right]_{0}^{\infty} + s \int_{0}^{\infty} \dot{x}(t) e^{-st} dt \\
+&= 0 - \dot{x}(0) + s(sX(s) - x(0)) \\
+&= s^2 X(s) - sx(0) - \dot{x}(0)
+\end{align*}
+
+So we see that the Laplace transform of a derivative is a polynomial in $s$ multiplied by the Laplace transform of the original function, minus some terms involving the initial conditions.
+
+\ex{Using Laplace transforms to solve a system}{
+Consider the system described by the following equation:
+\[
+\dot{w} + 3w = \delta (t)
+\]
+
+with initial rest conditions (i.e. $w(0) = 0$ and $\dot{w}(0) = 0$).
+
+Find the response of the system to this input.
+}
+\sol{
+Taking the Laplace transform of both sides of the equation, we get:
+\begin{align*}
+sW(s) - w(0) + 3W(s) &= 1 \\
+(s + 3)W(s) &= 1 \\
+W(s) &= \frac{1}{s + 3}
+\end{align*}
+
+Note that $p(s) = s+3$, so $W(s) = \frac{1}{p(s)}$. 
+
+We need to find some function $w(t)$ such that $\mathcal{L}\{w(t)\} = \frac{1}{s + 3}$. We can use the shifting property of Laplace transforms to find $w(t)$:
+\begin{align*}
+\mathcal{L}\{e^{-3t}\} &= \frac{1}{s - (-3)} \\
+&= \frac{1}{s + 3}
+\end{align*}
+
+Thus, we have that:
+\begin{equation*}
+\boxed{
+w(t) = e^{-3t} u(t)}
+\end{equation*}
+}
+
+Interestingly, this demonstrates that for the unit impulse response function, we can extract $p(s)$ from $W(s)$.
+
+\ex{}{
+Consider the system described by the following equation:
+\[
+\dot{x} + 3x = e^{-t}, \quad x(0^+) = 0
+\]
+}
+\sol{
+Taking the Laplace transform of both sides of the equation, we get:
+\begin{align*}
+sX(s) - x(0) + 3X(s) &= \frac{1}{s + 1} \\
+(s + 3)X(s) &= \frac{1}{s + 1} \\
+X(s) &= \frac{1}{(s + 3)(s + 1)}
+\end{align*}
+
+To find $x(t)$, we can use partial fraction decomposition to write $X(s)$ as a sum of simpler fractions:
+\begin{align*}
+X(s) &= \frac{1}{(s + 3)(s + 1)} \\
+&= \frac{A}{s + 3} + \frac{B}{s + 1}
+\end{align*}
+
+Solving for $A$ and $B$, we get:
+\begin{align*}
+A(s + 1) + B(s + 3) &= 1 \\
+A = \frac{1}{2}, \quad B = -\frac{1}{2}
+\end{align*}
+
+Then, we can write $X(s)$ as follows:
+\begin{align*}
+X(s) &= \frac{1/2}{s + 3} - \frac{1/2}{s + 1}
+\end{align*}
+
+We can use $e^{at}$ to find the inverse Laplace transform of each term:
+\begin{align*}
+\mathcal{L}\{e^{-3t}\} &= \frac{1}{s + 3} \\
+\mathcal{L}\{e^{-t}\} &= \frac{1}{s + 1}
+\end{align*}
+
+Thus, we have that:
+\begin{equation*}
+\boxed{
+x(t) = \frac{1}{2} e^{-3t} u(t) - \frac{1}{2} e^{-t} u(t)
+}
+\end{equation*}
+
+We can also get both $x_h(t)$ and $x_p(t)$ from this. In particular, the homogeneous solution is the term with $e^{-3t}$, and the particular solution is the term with $e^{-t}$.
+}
+
+\ex{}{
+Consider the system described by the following equation:
+\[
+\dot{x} + 3x = e^{-t}, \quad x(0^+) = 5
+\]
+}
+\sol{
+We interpret this as the system being at rest before $t = 0$, and then at $t = 0$, the system is given an initial condition of $x(0^+) = 5$.
+
+So we rewrite as:
+\begin{align*}
+\dot{x} + 3x &= e^{-t} + 5\delta(t)
+\end{align*}
+
+Then we can take the Laplace transform of both sides to get:
+\begin{align*}
+sX(s) - x(0) + 3X(s) &= \frac{1}{s + 1} + 5 \\
+(s + 3)X(s) &= \frac{1}{s + 1} + 5 \\
+X(s) &= \frac{1}{(s + 3)(s + 1)} + \frac{5}{s + 3}
+\end{align*}
+
+Then we can use partial fraction decomposition to find the inverse Laplace transform of the first term, and we can use $e^{at}$ to find the inverse Laplace transform of the second term:
+\begin{align*}
+\mathcal{L}\{e^{-3t}\} &= \frac{1}{s + 3} \\
+\mathcal{L}\{e^{-t}\} &= \frac{1}{s + 1}
+\end{align*}
+
+Thus, we have that:
+\begin{equation*}
+\boxed{
+x(t) = \frac{1}{2} e^{-3t} u(t) - \frac{1}{2} e^{-t} u(t) + 5 e^{-3t} u(t)
+}
+\end{equation*}
+}
+
+\ex{$n$-th order system}{
+    Consider a function $f(t)$ such that $\mathcal{L}\{f(t)\} = F(s)$. Find the Laplace transform of $f^{(n)}(t)$, where $f^{(n)}(t)$ is the $n$-th derivative of $f(t)$.
+}
+\sol{
+We can compute the Laplace transform of $f^{(n)}(t)$ as follows:
+\begin{align*}
+\mathcal{L}\{f^{(n)}(t)\} &= \int_{0}^{\infty} f^{(n)}(t) e^{-st} dt \\
+&= \left[ f^{(n-1)}(t) e^{-st} \right]_{0}^{\infty} + s \int_{0}^{\infty} f^{(n-1)}(t) e^{-st} dt \\
+&= 0 - f^{(n-1)}(0) + s \mathcal{L}\{f^{(n-1)}(t)\} \\
+&= s \mathcal{L}\{f^{(n-1)}(t)\} - f^{(n-1)}(0)
+\end{align*}
+Continuing this process iteratively, we get:
+\begin{align*}
+\mathcal{L}\{f^{(n)}(t)\} &= s \mathcal{L}\{f^{(n-1)}(t)\} - f^{(n-1)}(0) \\
+&= s(s \mathcal{L}\{f^{(n-2)}(t)\} - f^{(n-2)}(0)) - f^{(n-1)}(0) \\
+&= s^2 \mathcal{L}\{f^{(n-2)}(t)\} - sf^{(n-2)}(0) - f^{(n-1)}(0) \\
+&\vdots \\
+&= s^n \mathcal{L}\{f(t)\} - \sum_{k=1}^{n} s^{n-k} f^{(k-1)}(0) \\
+&= s^n F(s) - \sum_{k=1}^{n} s^{n-k} f^{(k-1)}(0)
+\end{align*}
+
+Read this as $s^n F(s)$ minus a sum of terms involving the initial conditions of $f(t)$ and its derivatives up to order $n-1$.
+}
+
+\ex{Solving a second-order system}{
+    Consider the following equation:
+\[
+\ddot{w} + 2 \dot{w} + 2w = \delta (t)
+\]
+
+Find the impulse response function of this system.
+}
+\sol{
+Taking the Laplace transform of both sides of the equation, we get:
+\begin{align*}
+s^2 W(s) - sw(0) - \dot{w}(0) + 2(sW(s) - w(0)) + 2W(s) &= 1 \\
+(s^2 + 2s + 2)W(s) &= 1 \\
+W(s) &= \frac{1}{s^2 + 2s + 2}
+\end{align*}
+To find $w(t)$, we can complete the square in the denominator of $W(s)$:
+\begin{align*}
+W(s) &= \frac{1}{(s + 1)^2 + 1}
+\end{align*}
+First, from the Laplace table, we see a $s^2$ term indicating a sinusoidal function. Then we can use the shifting property of Laplace transforms to find $w(t)$:
+\begin{align*}
+\mathcal{L}\{e^{-t} \sin t\} &= \frac{1}{(s + 1)^2 + 1}
+\end{align*}
+Thus, we have that:
+\begin{equation*}
+\boxed{
+w(t) = e^{-t} \sin t \cdot u(t)}
+\end{equation*}
+
+Observe the $u(t)$ term, which comes from the fact that the system is at rest before $t = 0$.
+}
+
+\dfn{Weight function}{
+    The \textbf{weight function} of a system is the response of the system to a unit impulse input ($\delta(t)$).
+}
+
+\dfn{Transfer function}{
+    The \textbf{transfer function} of a system is the Laplace transform of the weight function of the system.
+    }
+
+In particular, the transfer function of $P(D)$ for the system:
+\begin{align*}
+P(D) x = q(t)
+\end{align*}
+
+is given by passing a unit impulse input through the system and taking the Laplace transform of the output. So we have that:
+\begin{align*}
+p(D) w(t) &= \delta(t) \\
+\mathcal{L}\{p(D) w(t)\} &= \mathcal{L}\{\delta(t)\} \\
+p(s) W(s) &= 1 \\
+W(s) &= \frac{1}{p(s)}
+\end{align*}
+
+With this, we can see that to find $x(t)$, we can first find the transfer function $W(s)$, then find the Laplace transform of the input $q(t)$, and then multiply these two together to get $X(s)$, and finally take the inverse Laplace transform to get $x(t)$.
+
+\ex{Using the transfer function to solve a system}{
+    Consider the system described by the following equation:
+\[
+\ddot{x} + 4x = \cos(2t) u(t)
+\]
+
+Note that $u(t)$ signals rest initial conditions. Find the response of the system to this input.
+}
+\sol{
+First, we find the transfer function of the system. We can write the system as follows:
+\begin{align*}
+\ddot{w} + 4w &= \delta(t) \\
+p(D) w &= \delta(t)
+\end{align*}
+
+Recall that $W(s) = \frac{1}{p(s)}$, so we need to find $p(s)$:
+\begin{align*}
+p(s) &= s^2 + 4
+\end{align*}
+Thus, we have that:
+\begin{align*}
+W(s) &= \frac{1}{s^2 + 4}
+\end{align*}
+
+Now, multiplying $W(s)$ by the Laplace transform of the input $\cos(2t) u(t)$, we get:
+\begin{align*}
+X(s) &= W(s) \cdot \mathcal{L}\{\cos(2t) u(t)\} \\
+&= \frac{1}{s^2 + 4} \cdot \frac{s}{s^2 + 4} \\
+&= \frac{s}{(s^2 + 4)^2}
+\end{align*}
+
+Note this is equivalent to taking the convolution of the input with the weight function of the system, and then taking the Laplace transform of the result.
+
+
+We now need to find the inverse Laplace transform. Using the table, we can see that the inverse Laplace transform of $\frac{1}{s^2 + 4}$ is $\sin(2t)$. 
+
+However, $X(s)$ looks something like the derivative of $\frac{1}{s^2 + 4}$. In particular:
+\begin{align*}
+\frac{d}{ds} \left( \frac{1}{s^2 + 4} \right) &= -\frac{2s}{(s^2 + 4)^2} \\
+-\frac{1}{2} \cdot \frac{d}{ds} \left( \frac{1}{s^2 + 4} \right) &= \frac{s}{(s^2 + 4)^2}
+\end{align*}
+
+So we can use the property of Laplace transforms that states that the Laplace transform of $t f(t)$ is equal to $-F'(s)$, where $F(s)$ is the Laplace transform of $f(t)$. In particular, we have that:
+\begin{align*}
+\mathcal{L}\{t \sin(2t)\} &= \frac{4s}{(s^2 + 4)^2} \\ \quad \text{ scaling by } \frac{1}{4} \text{ gives } \\
+\frac{1}{4} \cdot \frac{4s}{(s^2 + 4)^2} &= \frac{s}{(s^2 + 4)^2}
+\end{align*}
+
+Thus, we have that:
+\begin{equation*}
+\boxed{x(t) = \frac{1}{4} t \sin(2t) \cdot u(t)}
+\end{equation*}
+}
+
+\section{Poles}
+We see that $F(s) = \frac{1}{s}$ has a singularity where $s = 0$, at which the function "blows up". We call such a point a \textbf{pole} of the function. In general, a pole of a function is a point in the complex plane where the function becomes unbounded (i.e., it goes to infinity).
+
+\ex{Poles of a function}{
+    Find the poles of the function $F(s) = \frac{1}{s^2 + 4}$.
+}
+\sol{
+The poles of $F(s)$ are the values of $s$ for which the denominator is zero:
+\[
+s^2 + 4 = 0 \implies s^2 = -4 \implies s = \pm 2i
+\]
+Thus, the poles are $s = 2i$ and $s = -2i$.
+}
