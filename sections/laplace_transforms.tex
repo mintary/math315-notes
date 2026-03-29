@@ -1076,3 +1076,24 @@ s^2 + 4 = 0 \implies s^2 = -4 \implies s = \pm 2i
 \]
 Thus, the poles are $s = 2i$ and $s = -2i$.
 }
+
+In the complex plane, the poles of a function have two parts:
+\begin{itemize}
+\item The real part of the pole, which determines the exponential growth or decay of the corresponding term in the time domain.
+\item The imaginary part of the pole, which determines the oscillatory behavior of the corresponding term in the time domain.
+\end{itemize}
+
+Poles with $\text{Re}(s) < 0$ correspond to terms that decay exponentially, while poles with $\text{Re}(s) > 0$ correspond to terms that grow exponentially. Poles with $\text{Re}(s) = 0$ correspond to terms that neither grow nor decay, but may oscillate if they have a nonzero imaginary part.
+
+\dfn{Stability}{
+    A system is \textbf{stable} if all poles of its transfer function have negative real parts. This means that the system's response to any bounded input will eventually decay to zero as time goes to infinity.
+}
+
+\nt{
+    A note on Fourier transforms as related to Laplace transforms. A continuous Fourier transform:
+\begin{align*}
+    \bbF\{f(t)\} = F(\omega) = \int_{-\infty}^{\infty} f(t) e^{-i\omega t} dt
+\end{align*}
+
+is a special case of the Laplace transform where $s = i\omega$. So Laplace transforms can be thought of as a generalization of Fourier transforms, where we allow for complex values of $s$ that can have both real and imaginary parts. This allows us to analyze systems that may not be purely oscillatory, but may also have exponential growth or decay.
+}

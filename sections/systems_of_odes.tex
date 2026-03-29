@@ -1,0 +1,165 @@
+\chapter{Systems of ODEs}
+
+\section{First-order systems of ODEs}
+Consider the following:
+\begin{equation*}
+\ddot{x} + x \dot{x} + \sin x = 0
+\end{equation*}
+
+This is a 2nd order, non-linear ODE. We can think of this as a system of ODEs by letting $y = \dot{x}$, so $\dot{y} = \ddot{x}$. Then we can rewrite the above as:
+\begin{equation*}
+\begin{cases}
+\dot{x} = y \\
+\dot{y} = -x y - \sin x
+\end{cases}
+\end{equation*}
+
+While this is a first-order system of ODEs, the solution is now two-dimensional, so we can represent it as a vector:
+\begin{equation*}
+\begin{bmatrix}
+\dot{x} \\
+\dot{y}
+\end{bmatrix} =
+\begin{bmatrix}y \\
+-x y - \sin x
+\end{bmatrix}
+\end{equation*}
+
+We call this a \textbf{phase space} representation of the system. The solution to this system will be a curve in the $xy$-plane, which we can visualize as a trajectory of the system.
+
+\dfn{Linear system of ODEs}{
+    A system of ODEs is linear if it can be written in the form:
+\begin{equation*}
+\dot{u} = 
+\begin{bmatrix}
+\dot{x}_1 \\
+\dot{x}_2 \\
+\vdots \\
+\dot{x}_n
+\end{bmatrix} =
+\begin{bmatrix}
+a_{11} & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{bmatrix}
+\begin{bmatrix}x_1 \\
+x_2 \\
+\vdots \\
+x_n
+\end{bmatrix}
+\end{equation*}
+}
+
+Letting the matrix be $A$, we can write a linear system of ODEs as:
+\[
+\boxed{
+\ddot{u} = A u
+}
+\]
+
+\nt{
+    If $A$ was a 1x1 matrix, then this would be a scalar and hence a single ode of the form:
+\begin{equation*}
+\dot{u} = \lambda u
+\end{equation*}
+which we solve as:
+\begin{equation*}
+u(t) = u(0) e^{\lambda t}
+\end{equation*}
+}
+
+Now, let $A \in \bbR^{m \times n}$, and let $u(t) \in \bbR^n$ be a vector of functions. Then we can write the system of ODEs as:
+\begin{equation*}
+\dot{u}(t) = A u(t)
+\end{equation*}
+
+We guess that the solution is of the form:
+\begin{equation*}
+u(t) = e^{At} u(0)
+\end{equation*}
+
+However, we must define what $e^{At}$ means.
+
+Recall the Taylor series expansion of the exponential function:
+\begin{equation*}
+e^{\lambda t} = \sum_{k=0}^{\infty} \frac{(\lambda t)^k}{k!}
+\end{equation*}
+
+Then we can define the matrix exponential as:
+\begin{equation*}
+e^{At} = \sum_{k=0}^{\infty} \frac{(At)^k}{k!}
+\end{equation*}
+
+We take the first derivative of $e^{At}$:
+\begin{equation*}
+\frac{d}{dt} e^{At} = \sum_{k=0}^{\infty} \frac{A^k t^{k-1}}{(k-1)!} = A \sum_{k=0}^{\infty} \frac{(At)^k}{k!} = A e^{At}
+\end{equation*}
+
+Thus, we have:
+\begin{equation*}
+u(t) = e^{At} u(0)
+\end{equation*}
+is indeed a solution to the system of ODEs.
+
+In particular, we found that $\dot{u}(t) = A e^{At} u(0) = A u(t)$, which is exactly the system of ODEs we wanted to solve.
+
+\ex{Trivial example}{
+    Let $\dot{u} = Au$ where:
+\begin{equation*}
+A = \begin{bmatrix}
+    a & 0 \\
+    0 & d
+\end{bmatrix}
+\end{equation*}
+
+Then we let:
+\begin{equation*}
+\begin{bmatrix}
+\dot{x} \\
+\dot{y}
+\end{bmatrix} =
+\begin{bmatrix}
+    a & 0 \\
+    0 & d
+\end{bmatrix}
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix} =
+\begin{bmatrix}
+    a x \\
+    d y
+\end{bmatrix}
+\end{equation*}
+
+Then solving each equation separately, we get:
+\begin{equation*}
+x(t) = x(0) e^{a t}, \quad y(t) = y(0) e^{d t}
+\end{equation*}
+
+\begin{equation*}
+\Rightarrow u(t) = \begin{bmatrix}
+x(0) e^{a t} \\
+y(0) e^{d t}
+\end{bmatrix} = e^{At} u(0)
+\end{equation*}
+
+where 
+\begin{equation*}
+u(0) = \begin{bmatrix}
+x(0) \\
+y(0)
+\end{bmatrix}
+\end{equation*}
+}
+
+Consider each of the cases:
+\begin{itemize}
+\item $a = d < 0$: then the solution decays to zero as $t \to \infty$. Stability is achieved in both cases.
+\item $a = d > 0$: then the solution grows exponentially as $t \to \infty$. Stability is never achieved.
+\item $a < d < 0$: then the solution decays to zero as $t \to \infty$, but the $y$ component decays faster than the $x$ component. Stability is achieved in both cases.
+\item $d < a < 0$: then the solution decays to zero as $t \to \infty$, but the $x$ component decays faster than the $y$ component. Stability is achieved in both cases.
+\item $a < 0 < d$: then the solution decays to zero as $t \to \infty$, but the $x$ component decays while the $y$ component grows. Stability is never achieved.
+\item $d < 0 < a$: then the solution decays to zero as $t \to \infty$, but the $y$ component decays while the $x$ component grows. Stability is never achieved.
+\end{itemize}
