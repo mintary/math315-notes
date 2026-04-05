@@ -163,3 +163,313 @@ Consider each of the cases:
 \item $a < 0 < d$: then the solution decays to zero as $t \to \infty$, but the $x$ component decays while the $y$ component grows. Stability is never achieved.
 \item $d < 0 < a$: then the solution decays to zero as $t \to \infty$, but the $y$ component decays while the $x$ component grows. Stability is never achieved.
 \end{itemize}
+
+\section{General solution to linear systems of ODEs}
+Let $\dot{u} = Au$ where $u = \begin{bmatrix}x_1 \\
+x_2 \\
+\vdots \\
+x_n
+\end{bmatrix}$ and $A \in \bbR^{n \times n}$.
+
+We will use the eigenvalue decomposition of $A$ to find the general solution to this system of ODEs. Let $A = PDP^{-1}$ where $D$ is a diagonal matrix containing the eigenvalues of $A$, and $P$ is a matrix whose columns are the corresponding eigenvectors.
+
+Recall the eigenvector $v$ corresponding to an eigenvalue $\lambda$ satisfies:
+\begin{equation*}
+Av = \lambda v
+\end{equation*}
+
+Then we have:
+\begin{equation*}
+(A - \lambda I) v = 0
+\end{equation*}
+
+We find that this is equivalent to stating that $\det(A - \lambda I) = 0$ (remember that the determinant is zero if and only if the matrix is singular, which is the case when there is a non-trivial solution to the above equation). 
+
+Then, solving:
+\begin{align*}
+\det(A - \lambda I) &=
+\begin{vmatrix}
+a_{11} - \lambda & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} - \lambda & \cdots & a_{2n} \\
+\vdots & \vdots & \ddots & \vdots \\
+a_{n1} & a_{n2} & \cdots & a_{nn} - \lambda
+\end{vmatrix} \\
+&= 0 \\
+&= \prod_{i=1}^n (\lambda_i - \lambda) = 0
+\end{align*}
+
+For a two-dimensional system, we see that the trace and determinant appear in the characteristic polynomial:
+\begin{align*}
+\det(A - \lambda I) &= \begin{vmatrix}
+a_{11} - \lambda & a_{12} \\
+a_{21} & a_{22} - \lambda
+\end{vmatrix} \\
+&= \lambda^2 - (a_{11} + a_{22}) \lambda + (a_{11} a_{22} - a_{12} a_{21}) \\
+&= \lambda^2 - \operatorname{tr}(A) \lambda + \det(A) = 0
+\end{align*}
+
+This is the characteristic polynomial of $A$. Furthermore, we see that the behaviour of the system is characterized by the difference between the trace and determinant of $A$.
+
+The exact relationship is given by:
+\begin{equation*}
+\lambda_{1, 2} = \frac{\operatorname{tr}(A) \pm \sqrt{\operatorname{tr}(A)^2 - 4 \det(A)}}{2}
+\end{equation*}
+
+We have:
+\begin{itemize}
+\item If $\operatorname{tr}(A)^2 - 4 \det(A) > 0$, then the eigenvalues are real and distinct, and the system is a node.
+\item If $\operatorname{tr}(A)^2 - 4 \det(A) = 0$, then the eigenvalues are real and repeated, and the system is a degenerate node.
+\item If $\operatorname{tr}(A)^2 - 4 \det(A) < 0$, then the eigenvalues are complex conjugates, and the system is a spiral.
+\end{itemize}
+
+And, we saw that the solution to the system of ODEs when $D$ is diagonal is given by:
+\begin{equation*}
+u(t) = e^{At} u(0) = P e^{Dt} P^{-1} u(0)
+\end{equation*}
+
+\begin{mdframed}
+\subsection{Steps to solve a system of ODEs}
+\begin{enumerate}
+\item Find the eigenvalues and eigenvectors of $A$.
+\item Form the matrix $P$ whose columns are the eigenvectors and the diagonal matrix $D$ whose diagonal entries are the corresponding eigenvalues.
+\item Compute $P^{-1}$.
+\item The general solution is given by $u(t) = P e^{Dt} P^{-1} u(0)$.
+\end{enumerate}
+\end{mdframed}
+
+\ex{Example of solving a system of ODEs}{
+    Let a system of ODEs be given by:
+    \begin{equation*}
+    \begin{cases}
+    \dot{x} = x + y \\
+    \dot{y} = 4x - 2y
+    \end{cases}
+    \end{equation*}
+
+with initial conditions $x(0) = 2$ and $y(0) = -3$.
+
+We can write this system in matrix form as:
+\begin{equation*}
+\begin{bmatrix}
+\dot{x} \\
+\dot{y}
+\end{bmatrix} =
+\begin{bmatrix}
+1 & 1 \\
+4 & -2
+\end{bmatrix}
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix}
+\end{equation*}
+
+Then, we find the eigenvalues of $A$ by using the trace and determinant:
+\begin{equation*}
+\operatorname{tr}(A) = 1 + (-2) = -1, \quad \det(A) = (1)(-2) - (4)(1) = -6
+\end{equation*}
+
+Computing with the characteristic polynomial, we have:
+\begin{align*}
+\lambda^2 - \operatorname{tr}(A) \lambda + \det(A) &= 0 \\
+\lambda^2 + \lambda - 6 &= 0 \\
+(\lambda + 3)(\lambda - 2) &= 0
+\end{align*}
+
+Then the eigenvalues are $\lambda_1 = -3$ and $\lambda_2 = 2$.
+
+For $\lambda_1 = -3$, we have:
+\begin{align*}
+\begin{bmatrix}
+1 - (-3) & 1 \\
+4 & -2 - (-3)
+\end{bmatrix}
+\begin{bmatrix}
+a \\
+b
+\end{bmatrix} &=
+0 \\
+\begin{bmatrix}
+4 & 1 \\
+4 & 1
+\end{bmatrix}
+\begin{bmatrix}
+a \\
+b
+\end{bmatrix} &=
+0
+\end{align*}
+
+If we row-reduce this matrix, we get:
+\begin{equation*}
+\begin{bmatrix}
+1 & \frac{1}{4} \\
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+a \\
+b
+\end{bmatrix} =
+0
+\end{equation*}
+
+This gives us the eigenvector corresponding to $\lambda_1$ as 
+$v_1 = \begin{bmatrix}
+-1 \\
+4
+\end{bmatrix}$.
+
+For $\lambda_2 = 2$, we have:
+\begin{align*}
+\begin{bmatrix}
+1 - 2 & 1 \\
+4 & -2 - 2
+\end{bmatrix}
+\begin{bmatrix}
+a \\
+b
+\end{bmatrix} &=
+0 \\
+\begin{bmatrix}
+-1 & 1 \\
+4 & -4
+\end{bmatrix}
+\begin{bmatrix}
+a \\
+b
+\end{bmatrix} &=
+0
+\end{align*}
+Row-reducing this matrix, we get:
+\begin{equation*}
+\begin{bmatrix}
+1 & -1 \\
+0 & 0
+\end{bmatrix}
+\begin{bmatrix}
+a \\
+b
+\end{bmatrix} =
+0
+\end{equation*}
+This gives us the eigenvector corresponding to $\lambda_2$ as
+$v_2 = \begin{bmatrix}
+1 \\
+1
+\end{bmatrix}$.
+
+Then, we can form the matrix $P$ and the diagonal matrix $D$ as follows:
+\begin{equation*}
+P = \begin{bmatrix}
+-1 & 1 \\
+4 & 1
+\end{bmatrix}, \quad D = \begin{bmatrix}
+-3 & 0 \\
+0 & 2
+\end{bmatrix}
+\end{equation*}
+
+Rather than compute $P^{-1}$, we can write the solution as:
+\begin{align*}
+u(t) &=
+c_1 
+\begin{bmatrix}
+1 \\
+1
+\end{bmatrix}
+e^{2t} +
+c_2
+\begin{bmatrix}
+-1 \\
+4
+\end{bmatrix}
+e^{-3t} \label{eq:general_solution}
+\end{align*}
+
+Then, we can use the initial conditions to solve for $c_1$ and $c_2$:
+\begin{align*}
+\begin{bmatrix}
+2 \\
+-3
+\end{bmatrix} &=
+c_1
+\begin{bmatrix}
+1 \\
+1
+\end{bmatrix} +
+c_2
+\begin{bmatrix}
+-1 \\
+4
+\end{bmatrix} \\
+\Rightarrow
+\begin{bmatrix}
+2 \\
+-3
+\end{bmatrix} &=
+\begin{bmatrix}
+c_1 - c_2 \\
+c_1 + 4 c_2
+\end{bmatrix}
+\end{align*}
+This gives us the system of equations:
+\begin{align*}
+c_1 - c_2 &= 2 \\
+c_1 + 4 c_2 &= -3
+\end{align*}
+Solving this system, we get:
+\begin{align*}
+c_1 &= 1 \\
+c_2 &= -1
+\end{align*}
+
+Thus, the solution to the system of ODEs is given by:
+\begin{equation*}
+u(t) =
+\begin{bmatrix}
+1 \\
+1
+\end{bmatrix}
+e^{2t} -
+\begin{bmatrix}
+-1 \\
+4
+\end{bmatrix}
+e^{-3t}
+\end{equation*}
+
+Note that computing $c_1 v_1 + c_2 v_2 = u(0)$ where $v_1$ and $v_2$ are eigenvectors is equivalent to inverting the matrix $P$ then multiplying by $u(0)$, which is the same as computing $P^{-1} u(0)$.
+
+Also, the eigenvalues tell us about the stability of the system. Since $\lambda_1 = -3 < 0$ and $\lambda_2 = 2 > 0$, we see that the system is unstable, as one of the eigenvalues is positive. The solution will grow exponentially as $t \to \infty$ due to the term involving $e^{2t}$, which corresponds to the eigenvalue $\lambda_2$.
+
+}
+
+\section{Phase portraits}
+
+Consider the system of ODEs given in the previous example with $\lambda_1 = 2 > 0$ and $\lambda_2 = -3 < 0$. We found the eigenvectors:
+\begin{equation*}
+v_1 = \begin{bmatrix}
+1 \\
+1
+\end{bmatrix}, \quad v_2 = \begin{bmatrix}
+-1 \\
+4
+\end{bmatrix}
+\end{equation*}
+
+Then we can draw a phase portrait by plotting the eigenvectors and the trajectories of the system in the $xy$-plane. The eigenvector corresponding to the positive eigenvalue will indicate the direction of growth, while the eigenvector corresponding to the negative eigenvalue will indicate the direction of decay.
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/linear_systems/phase_portrait_example1.png}
+\end{center}
+
+Note that the characteristic polynomial $\lambda^2 + \lambda -6 = p(\lambda)$ is exactly the same as the one-dimensional 2nd order system:
+\begin{align*}
+\ddot{x} = \frac{d}{dt} \dot{x} &= \frac{d}{dt} (x + y) \\
+&= \dot{x} + \dot{y} \\
+&= \dot{x} + 4x - 2y \\
+&= \dot{x} + 4x - 2(\dot{x} - x) \\
+&= -\dot{x} + 6x \\
+\end{align*}
+
+Then we have that $\ddot{x} + \dot{x} - 6x = 0$ has the same characteristic polynomial as the system of ODEs, and hence the same eigenvalues. This is a general result: the characteristic polynomial of a system of ODEs is the same as the characteristic polynomial of the corresponding higher-order ODE.
