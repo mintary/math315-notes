@@ -54,7 +54,7 @@ x_n
 Letting the matrix be $A$, we can write a linear system of ODEs as:
 \[
 \boxed{
-\ddot{u} = A u
+\dot{u} = A u
 }
 \]
 
@@ -460,7 +460,7 @@ v_1 = \begin{bmatrix}
 Then we can draw a phase portrait by plotting the eigenvectors and the trajectories of the system in the $xy$-plane. The eigenvector corresponding to the positive eigenvalue will indicate the direction of growth, while the eigenvector corresponding to the negative eigenvalue will indicate the direction of decay.
 
 \begin{center}
-\includegraphics[width=0.5\textwidth]{images/linear_systems/phase_portrait_example1.png}
+\includegraphics[width=0.9\textwidth]{images/linear_systems/phase_portrait_example1.png}
 \end{center}
 
 Note that the characteristic polynomial $\lambda^2 + \lambda -6 = p(\lambda)$ is exactly the same as the one-dimensional 2nd order system:
@@ -473,3 +473,309 @@ Note that the characteristic polynomial $\lambda^2 + \lambda -6 = p(\lambda)$ is
 \end{align*}
 
 Then we have that $\ddot{x} + \dot{x} - 6x = 0$ has the same characteristic polynomial as the system of ODEs, and hence the same eigenvalues. This is a general result: the characteristic polynomial of a system of ODEs is the same as the characteristic polynomial of the corresponding higher-order ODE.
+
+
+\chapter{Harmonic oscillators}
+Consider the second-order ODE given by:
+\begin{equation*}
+\ddot{x} + \omega^2 x = 0
+\end{equation*}
+
+By using a change of variables $y = \dot{x}$, we can rewrite this as a system of ODEs:
+\begin{equation*}
+\begin{cases}
+\dot{x} = y \\
+\dot{y} = -\omega^2 x
+\end{cases}
+\end{equation*}
+
+This system of ODEs can be represented in matrix form as:
+\begin{equation*}
+\begin{bmatrix}
+\dot{x} \\
+\dot{y}
+\end{bmatrix} =
+\begin{bmatrix}
+0 & 1 \\
+-\omega^2 & 0
+\end{bmatrix}
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix}
+\end{equation*}
+
+The characteristic polynomial of the matrix is given by:
+\begin{align*}
+\det \begin{bmatrix}
+-\lambda & 1 \\
+-\omega^2 & -\lambda
+\end{bmatrix} &=
+\lambda^2 + \omega^2 = 0
+\end{align*}
+
+This gives us the eigenvalues $\lambda = \pm i \omega$. We find that the eigenvectors are: 
+\begin{equation*}
+v_1 = \begin{bmatrix}
+1 \\
+i \omega
+\end{bmatrix}, \quad v_2 = \begin{bmatrix}
+1 \\
+- i \omega
+\end{bmatrix}
+\end{equation*}
+
+Then, we can write the general solution to the system of ODEs as:
+\begin{equation*}
+u(t) = c_1 e^{i \omega t} v_1 + c_2 e^{- i \omega t} v_2
+\end{equation*}
+
+We have a real solution, so the coefficients $c_1$ and $c_2$ must be complex. Using initial conditions $u(0) = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$, we solve:
+\begin{align*}
+\begin{bmatrix}
+1 \\
+0
+\end{bmatrix} &=
+c_1 \begin{bmatrix}
+1 \\
+i \omega
+\end{bmatrix} +
+c_2 \begin{bmatrix}
+1 \\
+- i \omega
+\end{bmatrix} \\
+&=
+\begin{bmatrix}
+-i (c_1 - c_2) \\
+\omega (c_1 + c_2)
+\end{bmatrix}
+\end{align*}
+
+Then from $c_1 = -c_2$, we get $1 = -i (2c_2)$, so $c_2 = \frac{i}{2}$ and $c_1 = -\frac{i}{2}$. Thus, the solution to the system of ODEs is given by:
+\begin{equation*}
+u(t) = \frac{i}{2} e^{- i \omega t} v_2 - \frac{i}{2} e^{i \omega t} v_1
+\end{equation*}
+
+Using Euler's formula, we can rewrite this as:
+\begin{equation*}
+u(t) = \begin{bmatrix}
+\cos(\omega t) \\
+- \omega \sin(\omega t)
+\end{bmatrix}
+\end{equation*}
+
+Now, plotting the phase portait of this system, we get cycles around the origin.
+\begin{center}
+\includegraphics[width=0.9\textwidth]{images/linear_systems/phase_portrait_example2.png}
+\end{center}
+
+\ex{Love affair}{
+    Consider two functions:
+    \begin{equation*}
+\begin{cases}
+    R(t) = \text{Romeo's love for Juliet at time } t \\
+    J(t) = \text{Juliet's love for Romeo at time } t
+\end{cases}
+    \end{equation*}
+
+    We first consider when the love that Romeo has for Juliet depends only on Juliet's love for Romeo, and vice versa. Let $a, b > 0$, then:
+\begin{equation*}
+\begin{cases}
+    \dot{R} = a J \\
+    \dot{J} = -b R
+\end{cases}
+\end{equation*}
+This system describes a situation where Romeo loves Juliet the more she loves him, but Juliet loves Romeo the less he loves her. We see that this is equivalent to the harmonic oscillator system above (with different coefficients), so we would observe cycling behaviour.
+
+\begin{center}
+\includegraphics[width=0.6\textwidth]{images/linear_systems/love_affair_example1.png}
+\end{center}
+
+Now, we consider the general case:
+\begin{equation*}
+\begin{cases}
+    \dot{R} = a R + b J \\
+    \dot{J} = c R + d J
+\end{cases}
+\end{equation*}
+
+The choice of sign for each coefficient signals the romantic style.
+
+Consider a case where $a < 0$, $b > 0$, and we have:
+\begin{equation*}
+\begin{cases}
+    \dot{R} = a R + b J \\
+    \dot{J} = b R + a J
+\end{cases}
+\end{equation*}
+
+Then the matrix of this system is given by:
+\begin{equation*}
+A = \begin{bmatrix}
+a & b \\
+b & a
+\end{bmatrix}
+\end{equation*}
+
+It should be easy to see that the eigenvalues of this matrix are given by $\lambda_1 = a + b$ and $\lambda_2 = a - b$. Also, the eigenvectors are:
+\begin{equation*}
+v_1 = \begin{bmatrix}
+1 \\
+1
+\end{bmatrix}, \quad v_2 = \begin{bmatrix}
+1 \\
+-1
+\end{bmatrix}
+\end{equation*}
+
+We can also compute the determinant:
+\begin{equation*}
+\det(A) = a^2 - b^2
+\end{equation*}
+
+Then depending on the value of $a$ and $b$, we can have different behaviours:
+\begin{itemize}
+\item If $a^2 > b^2$, then the eigenvalues are real and negative, and the system is a stable node. The love affair will eventually die out. \\
+\item If $a^2 < b^2$, then the eigenvalues are real and of opposite signs, and the system is a saddle. The love affair will be unstable, with one person loving the other more and more while the other person loves them less and less.
+\end{itemize}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/linear_systems/love_affair_example2.png}
+\end{center}
+
+\begin{center}
+\includegraphics[width=0.5\textwidth]{images/linear_systems/love_affair_example3.png}
+\end{center}
+}
+
+\subsection{Repeated eigenvalues}
+
+Given the system $\dot{u} = Au$ (for a 2-dimensional system), if $A$ has a repeated eigenvalue, then:
+\begin{itemize}
+\item Then only one eigenvector  $v_1$ exists. 
+\item There is only one fundamental solution given by: $u_1(t) = e^{\lambda t} v_1$ where $v_1$ is the eigenvector. 
+\end{itemize}
+
+We need another solution which is linearly independent from $v_1$.
+
+\begin{mdframed}
+\subsection{Finding a second solution when there is a repeated eigenvalue}
+Let $v_1$ be the eigenvector corresponding to the repeated eigenvalue $\lambda$. We can find a second solution of the form:
+\begin{equation*}
+u_2(t) = e^{\lambda t} (t v_1 + w)
+\end{equation*}
+where $w$ is a vector that we need to determine.
+
+Plug $u_2 (t)$ into $\dot{u} = Au$:
+\begin{align*}
+\dot{u}_2(t) &= A u_2(t) \\
+e^{\lambda t} (v_1 + t \lambda v_1 + \lambda w) &= e^{\lambda t} (t A v_1 + A w) \\
+v_1 + t \lambda v_1 + \lambda w &= t \lambda v_1 + A w \quad \text{ using } Av_1 = \lambda v_1\\ 
+v_1 + \lambda w &= A w
+\end{align*}
+
+
+Rearranging this, we get:
+\begin{equation*}
+(A - \lambda I) w = v_1
+\end{equation*}
+Since $v_1$ is an eigenvector corresponding to $\lambda$, we know that $(A - \lambda I) v_1 = 0$. Thus, the matrix $A - \lambda I$ is singular, and we can find a solution for $w$ using methods such as Gaussian elimination or by finding the null space of $A - \lambda I$.
+\end{mdframed}
+
+The general solution to the system of ODEs in this case is given by:
+\begin{equation*}
+\boxed{
+u(t) = c_1 e^{\lambda t} v_1 + c_2 e^{\lambda t} (t v_1 + w)
+}
+\end{equation*}
+
+\ex{Example of repeated eigenvalues}{
+    Consider the system of ODEs given by:
+\begin{equation*}
+\begin{cases}
+\dot{x} = 2x + y \\
+\dot{y} = -4x - 2y
+\end{cases}
+\end{equation*}
+We can write this system in matrix form as:
+\begin{equation*}
+\begin{bmatrix}
+\dot{x} \\
+\dot{y}
+\end{bmatrix} =
+\begin{bmatrix}
+2 & 1 \\
+-4 & -2
+\end{bmatrix}
+\begin{bmatrix}
+x \\
+y
+\end{bmatrix}
+\end{equation*}
+
+We will find that $\lambda = 0$ is a repeated eigenvalue, and that $u_1(t) = \begin{bmatrix}
+1 \\
+-2
+\end{bmatrix}$ is the corresponding eigenvector.
+
+Then, we can find $w$ by solving:
+\begin{equation*}
+\begin{bmatrix}
+2 & 1 \\
+-4 & -2
+\end{bmatrix}
+\begin{bmatrix}
+w_1 \\
+w_2
+\end{bmatrix} =
+\begin{bmatrix}
+1 \\
+-2
+\end{bmatrix}
+\end{equation*}
+
+We can row-reduce this matrix to find a solution for $w$:
+\begin{equation*}
+\begin{bmatrix}
+2 & 1 & 1 \\
+-4 & -2 & -2
+\end{bmatrix} \to
+\begin{bmatrix}
+1 & \frac{1}{2} & \frac{1}{2} \\
+0 & 0 & 0
+\end{bmatrix}
+\end{equation*}
+
+This gives us: $2a + b = 1$. We could choose $a = 0$ and $b = 1$, then:
+\begin{equation*}
+w = \begin{bmatrix}
+0 \\
+1
+\end{bmatrix}
+\end{equation*}
+
+Thus, the general solution to the system of ODEs is given by:
+\begin{equation*}
+u(t) = c_1 
+\begin{bmatrix}
+1 \\
+-2 
+\end{bmatrix} +
+c_2 
+\left(
+t 
+\begin{bmatrix}
+1 \\ 
+-2
+\end{bmatrix}
++ 
+\begin{bmatrix}
+0 \\
+1
+\end{bmatrix}
+\right)
+\end{equation*}
+}
+
+
+
