@@ -1,4 +1,5 @@
 \chapter{Nonlinear systems}
+\subsection{Local linearization}
 
 Consider a 2-dimensional nonlinear system:
 \begin{equation*}
@@ -155,7 +156,197 @@ To sketch the phase portrait for a nonlinear system, we can follow these steps:
     \item Extend the flow lines at the nullclines.
 \end{enumerate}
 \begin{center}
-\includegraphics[width=0.9\textwidth]{images/nonlinear_systems/fixed_points.png}
+\includegraphics[width=0.7\textwidth]{images/nonlinear_systems/fixed_points.png}
 \end{center}
 \end{mdframed}
+
+
+
+\section{Power series solutions}
+Let $A$ be a \textbf{ordinary point} of the ODE:
+\begin{equation*}
+    P(x) \ddot{y} + Q(x) \dot{y} + R(x) y = 0
+\end{equation*}
+
+where $P, Q, R$ are polynomials. We can write a power series expansion of $y$ of the form:
+\begin{equation*}
+y(x) = \sum_{n=0}^{\infty} c_n (x-a)^n
+\end{equation*}
+
+This power series will converge for $|x-a| < R$ where $R$ is the distance from $a$ to the nearest singular point of the ODE.
+
+\nt{
+    The ordinary point $a$ is a point where $P(a) \neq 0$. If $P(a) = 0$, then $a$ is a singular point. The radius of convergence of the power series solution is determined by the distance from $a$ to the nearest singular point, which is the point where $P(x) = 0$.
+}
+
+We want to determine some recurrence relation for the coefficients $c_n$.
+
+To test this, we can compute the derivatives of $y$:
+\begin{equation*}
+\dot{y} = \sum_{n=1}^{\infty} n c_n (x-a)^{n-1}, \quad
+\ddot{y} = \sum_{n=2}^{\infty} n (n-1) c_n (x-a)^{n-2}
+\end{equation*}
+
+Then, if we were to substitute these into the ODE, we would get:
+\begin{equation*}
+P(x) \sum_{n=2}^{\infty} n (n-1) c_n (x-a)^{n-2} + Q(x) \sum_{n=1}^{\infty} n c_n (x-a)^{n-1} + R(x) \sum_{n=0}^{\infty} c_n (x-a)^n = 0
+\end{equation*}
+
+And since $P, Q, R$ are polynomials, we'd obtain new coefficients for each power of $(x-a)$, which would give us a recurrence relation for the coefficients $c_n$.
+
+\begin{mdframed}
+\subsection{Power series expansions of common functions}
+\begin{align*}
+e^x &= \sum_{n=0}^{\infty} \frac{x^n}{n!} \\
+\sin x &= \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n+1}}{(2n+1)!} \\
+\cos x &= \sum_{n=0}^{\infty} \frac{(-1)^n x^{2n}}{(2n)!}
+\end{align*}
+\end{mdframed}
+
+\ex{}{
+    Solve the ODE using power series:
+    \begin{equation*}
+        \ddot{y} - 2 \dot{y} + y = 0
+    \end{equation*}
+    evaluated at $x=0$.
+
+    We start by writing the power series expansion of $y$:
+    \begin{equation*}
+        y(x) = \sum_{n=0}^{\infty} c_n x^n
+    \end{equation*}
+
+    Then, we compute the derivatives:
+    \begin{equation*}
+        \dot{y} = \sum_{n=1}^{\infty} n c_n x^{n-1}, \quad
+        \ddot{y} = \sum_{n=2}^{\infty} n (n-1) c_n x^{n-2}
+    \end{equation*}
+
+    We can shift the indices of the sums to get:
+    \begin{equation*}
+        \dot{y} = \sum_{n=0}^{\infty} (n+1) c_{n+1} x^n, \quad
+        \ddot{y} = \sum_{n=0}^{\infty} (n+2)(n+1) c_{n+2} x^n
+    \end{equation*}
+
+    Substituting these into the ODE, we get:
+    \begin{align*}
+        &\sum_{n=0}^{\infty} (n+2)(n+1) c_{n+2} x^n - 2 \sum_{n=0}^{\infty} (n+1) c_{n+1} x^n + \sum_{n=0}^{\infty} c_n x^n = 0 \\
+        \implies &\sum_{n=0}^{\infty} [(n+2)(n+1) c_{n+2} - 2(n+1) c_{n+1} + c_n] x^n = 0
+    \end{align*}
+    Since this must hold for all $x$, we can equate the coefficients of each power of $x$ to zero:
+    \begin{equation*}
+        (n+2)(n+1) c_{n+2} - 2(n+1) c_{n+1} + c_n = 0 \quad \text{ for } n \geq 0
+    \end{equation*}
+    This gives us the recurrence relation:
+    \begin{equation*}
+        c_{n+2} = \frac{2(n+1) c_{n+1} - c_n}{(n+2)(n+1)} \quad \text{ for } n \geq 0
+    \end{equation*}
+
+    Let's fix $c_0 = c_1$. Then, we can compute the coefficients:
+    \begin{align*}
+        c_2 &= \frac{2(1) c_1 - c_0}{2 \cdot 1} = \frac{2 c_1 - c_0}{2} = \frac{c_0}{2} \\
+        c_3 &= \frac{2(2) c_2 - c_1}{3 \cdot 2} = \frac{4 c_2 - c_1}{6} = \frac{4 (\frac{c_1}{2}) - c_1}{6} = \frac{c_0}{6}\\
+        c_4 &= \frac{2(3) c_3 - c_2}{4 \cdot 3} = \frac{6 c_3 - c_2}{12} = \frac{-c_2}{12} = \frac{c_0}{24}
+    \end{align*}
+
+    Continuing this process, we can find that $c_n = \frac{c_0}{n!}$ for all $n \geq 0$. Thus, the power series solution is:
+    \begin{equation*}
+        y(x) = \sum_{n=0}^{\infty} \frac{c_0}{n!} x^n = c_0 e^x
+    \end{equation*}
+
+    However, we could get a different solution if we had chosen $c_0$ and $c_1$ to be different. For example, if we had chosen $c_0 = 0$ and $c_1 = 1$, we would get the solution:
+    \begin{align*}
+        c_2 &= \frac{2(1) c_1}{2 \cdot 1} = \frac{2}{2} = 1 \\
+        c_3 &= \frac{2(2) c_2 - c_1}{3 \cdot 2} = \frac{4 - 1}{6} = \frac{1}{2} \\
+        c_4 &= \frac{2(3) c_3 - c_2}{4 \cdot 3} = \frac{6 (\frac{1}{2}) - 1}{12} = \frac{1}{8}  \\
+        \vdots
+    \end{align*}
+
+    In this case, we would get coefficientss:
+    \begin{align*}
+        c_n = \frac{1}{(n-1)!} \quad \text{ for } n \geq 1
+    \end{align*}
+
+    Thus, the power series solution would be:
+    \begin{equation*}
+        y(x) = \sum_{n=1}^{\infty} \frac{1}{(n-1)!} x^n = x e^x
+    \end{equation*}
+
+    Then, the general solution to the ODE is a linear combination of these two solutions:
+    \begin{equation*}
+        y(x) = C_0 e^x + C_1 x e^x \quad \text{ for some constants } C_0, C_1 \in \mathbb{R}
+    \end{equation*}
+
+    Note that the characteristic polynomial of the above solution is:
+\begin{equation*}
+\lambda^2 - 2 \lambda + 1 = (\lambda - 1)^2
+\end{equation*}
+which has a repeated root at $\lambda = 1$. This explains why we get two linearly independent solutions of the form $e^x$ and $x e^x$.
+
+
+}
+
+\ex{Nonlinear systems}{
+    Consider the system:
+    \begin{equation*}
+    (x^2 - 4) \ddot{y} + 3x \dot{y} + y = 0
+    \end{equation*}
+
+    If we set $x = -2, 2$ then the $\ddot{y}$ term vanishes. Thus, $x = -2$ and $x =2$ are called \textbf{singular points}.
+
+    The radius of convergence of the power series solution around $x = 0$ is $2$, since the nearest singular points are at $x = -2$ and $x = 2$.
+
+    We can find the power series solution around $x = 0$ by following the same process as before. We write:
+    \begin{equation*}
+y(x) = \sum_{n=0}^{\infty} c_n x^n
+\end{equation*}
+and compute the derivatives:
+\begin{equation*}
+\dot{y} = \sum_{n=1}^{\infty} n c_n x^{n-1}, \quad
+\ddot{y} = \sum_{n=2}^{\infty} n (n-1) c_n x^{n-2}
+\end{equation*}
+
+Then, we substitute into the ODE:
+\begin{align*}
+0 &= (x^2 - 4) \sum_{n=2}^{\infty} n (n-1) c_n x^{n-2} + 3x \sum_{n=1}^{\infty} n c_n x^{n-1} + \sum_{n=0}^{\infty} c_n x^n \\
+&= \sum_{n=2}^{\infty} n (n-1) c_n x^n - 4 \sum_{n=2}^{\infty} n (n-1) c_n x^{n-2} + 3 \sum_{n=1}^{\infty} n c_n x^n + \sum_{n=0}^{\infty} c_n x^n 
+\end{align*}
+
+We want to shift the indices of the sums so that they all have the same power of $x$. This means we only need to shift the second sum:
+\begin{align*}
+0 &= -4 \sum_{n=2}^{\infty} n (n-1) c_n x^{n-2} \\
+&= -4 \sum_{n=0}^{\infty} (n+2)(n+1) c_{n+2} x^n
+\end{align*}
+
+Now we have:
+\begin{align*}
+0 &= \sum_{n=2}^{\infty} n (n-1) c_n x^n - 4 \sum_{n=0}^{\infty} (n+2)(n+1) c_{n+2} x^n + 3 \sum_{n=1}^{\infty} n c_n x^n + \sum_{n=0}^{\infty} c_n x^n 
+\end{align*}
+
+Note that some of the sums start at different indices. So we compute $n = 0$ and $n=1$ separately.
+
+When $n = 0$, we get:
+\begin{align*}
+0 &= -4 \cdot 2 \cdot 1 \cdot c_2 + c_0 \\
+\implies c_2 &= \frac{c_0}{8}
+\end{align*}
+
+When $n = 1$, we get:
+\begin{align*}
+0 &= -4 \cdot 3 \cdot 2 \cdot c_3 + 3 \cdot 1 \cdot c_1  + c_1 \\
+\implies c_3 &= \frac{c_1}{24}
+\end{align*}
+
+For $n \geq 2$, we can use the whole sum:
+\begin{align*}
+0 &= \sum_{n=2}^{\infty} [n (n-1) c_n - 4 (n+2)(n+1) c_{n+2} + 3 n c_n + c_n] x^n \\
+\implies c_{n+2} &= \frac{(n^2 + 2n + 1) c_n}{4 (n+2)(n+1)} = \frac{(n+1)^2 c_n}{4 (n+2)(n+1)} = \frac{(n+1) c_n}{4 (n+2)} \quad \text{ for } n \geq 2
+\end{align*}
+
+Then even coefficients can be expressed in terms of $c_0$ and odd coefficients can be expressed in terms of $c_1$:
+\begin{align*}
+y(x) &= c_0 + c_1 x + \frac{c_0}{8} x^2 + \frac{c_1}{24} x^3 + \frac{2 c_0}{4 \cdot 4 \cdot 6} x^4 + \frac{3 c_1}{4 \cdot 5 \cdot 7} x^5 + \cdots \\
+&= c_0 \left( 1 + \frac{1}{8} x^2 + \frac{1}{4 \cdot 4 \cdot 6} x^4 + \cdots \right) + c_1 \left( x + \frac{1}{24} x^3 + \frac{3}{4 \cdot 5 \cdot 7} x^5 + \cdots \right)
+\end{align*}
+
+}
 
